@@ -27,7 +27,7 @@ public class BeanUsers {
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
 	}
-	public int isSex() {
+	public int getSex() {
 		return sex;
 	}
 	public void setSex(int sex) {
