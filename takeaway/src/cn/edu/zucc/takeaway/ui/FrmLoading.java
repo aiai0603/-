@@ -79,15 +79,14 @@ public class FrmLoading extends JDialog implements ActionListener {
 		
 			FrmLogin dlg=new FrmLogin(this,"µÇÂ¼",true);
 			dlg.setVisible(true);
-			
 			if(ok==0)
 			this.setVisible(false);
+			
 		}
 		
 			
 			
 		 else if (e.getSource() == this.btnAdmin) {
-			 
 				FrmLoginAdmin dlg=new FrmLoginAdmin(this,"¹ÜÀíÔ±µÇÂ¼",true);
 				dlg.setVisible(true);
 				
