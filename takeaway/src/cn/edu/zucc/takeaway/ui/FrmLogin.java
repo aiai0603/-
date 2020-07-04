@@ -64,7 +64,12 @@ public class FrmLogin extends JDialog implements ActionListener {
 
 		btnLogin.addActionListener(this);
 		btnCancel.addActionListener(this);
-		
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				FrmLoading.ok=1;
+				setVisible(false);
+			}
+		});
 		
 	}
 
@@ -80,7 +85,8 @@ public class FrmLogin extends JDialog implements ActionListener {
 				BeanUsers.currentLoginUser= ex.login(username, pwd);
 				
 				if(pwd.equals(BeanUsers.currentLoginUser.getPwd())){
-					
+					FrmLoading.ok=0;
+					FrmMain.uskind=1;
 					setVisible(false);
 				}
 				
@@ -95,8 +101,9 @@ public class FrmLogin extends JDialog implements ActionListener {
 			
 			
 		} else if (e.getSource() == this.btnCancel) {
-			this.setVisible(false);
 			FrmLoading.ok=1;
+			this.setVisible(false);
+			
 			
 		} 
 		
