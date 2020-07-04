@@ -1,6 +1,7 @@
 package cn.edu.zucc.takeaway.model;
 
 public class BeanAdmin {
+	public static BeanAdmin currentLoginAdmin=null;
 	private int admin_no;
 	private String admin_name;
 	private String pwd;
