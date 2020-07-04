@@ -37,14 +37,14 @@ public class FrmRegister extends JDialog implements ActionListener {
 	private JLabel labelUser = new JLabel("用户：");
 	private JLabel tele = new JLabel("电话：");
 	private JLabel email = new JLabel("邮箱：");
-	String city[]= {" 嘉兴"," 上海"," 杭州"," 温州"," 台州"};
+	String city[]= {"NewYork","HongKong","HangZhou","BeiJing","JiaXing"};
 	JComboBox<String> cb=new JComboBox<String>(city);
 	
 	
 	private JLabel labelPwd = new JLabel("密码：");
 	private JLabel labelPwd2 = new JLabel("密码：");
-	private JLabel sex = new JLabel("性别：");
-	private JLabel labelCity = new JLabel("城市(本软件仅支持部分城市试用)：");
+	private JLabel sex = new JLabel("性别：                      ");
+	private JLabel labelCity = new JLabel("城市：                                 ");
 	private JTextField edtUserId = new JTextField(20);
 	private JTextField edtele = new JTextField(20);
 	private JTextField edemail = new JTextField(20);
