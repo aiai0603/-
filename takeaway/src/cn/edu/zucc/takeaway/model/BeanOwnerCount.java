@@ -2,79 +2,52 @@ package cn.edu.zucc.takeaway.model;
 
 import java.util.Date;
 
+
 public class BeanOwnerCount {
 	
-	private int user_no;
-	private String user_name;
-	private boolean sex;
-	private String pwd;
-	private String tele;
-	private String email;
-	private String city;
-	private Date sign_date;
-	private boolean vip;
-	private Date vip_end;
+	private int shop_no;
+	private int youhui_no;
+	private double count_money;
+	private int num;
+	private Date end_date;
+	public int getShop_no() {
+		return shop_no;
+	}
+	public void setShop_no(int shop_no) {
+		this.shop_no = shop_no;
+	}
+	public int getYouhui_no() {
+		return youhui_no;
+	}
+	public void setYouhui_no(int youhui_no) {
+		this.youhui_no = youhui_no;
+	}
+	public double getCount_money() {
+		return count_money;
+	}
+	public void setCount_money(double count_money) {
+		this.count_money = count_money;
+	}
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
+	public Date getEnd_date() {
+		return end_date;
+	}
+	public void setEnd_date(Date end_date) {
+		this.end_date = end_date;
+	}
+
 	
-	public int getUser_no() {
-		return user_no;
-	}
-	public void setUser_no(int user_no) {
-		this.user_no = user_no;
-	}
-	public String getUser_name() {
-		return user_name;
-	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
-	}
-	public boolean isSex() {
-		return sex;
-	}
-	public void setSex(boolean sex) {
-		this.sex = sex;
-	}
-	public String getPwd() {
-		return pwd;
-	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-	public String getTele() {
-		return tele;
-	}
-	public void setTele(String tele) {
-		this.tele = tele;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
-	public Date getSign_date() {
-		return sign_date;
-	}
-	public void setSign_date(Date sign_date) {
-		this.sign_date = sign_date;
-	}
-	public boolean isVip() {
-		return vip;
-	}
-	public void setVip(boolean vip) {
-		this.vip = vip;
-	}
-	public Date getVip_end() {
-		return vip_end;
-	}
-	public void setVip_end(Date vip_end) {
-		this.vip_end = vip_end;
-	}
+
+	
+	
+	
+	
+	
 	
 	
 	
