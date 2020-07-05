@@ -2,7 +2,7 @@ package cn.edu.zucc.takeaway.model;
 
 public class BeanKind {
 	
-	
+	public static final  String[] tableTitles= {"Àà±ğÃû"};
 	private int shop_no;
 	private int kind_no;
 	private String kind_name;
@@ -33,7 +33,13 @@ public class BeanKind {
 		this.kind_sum = kind_sum;
 	}
 	
-
+	public String getCell(int col){
+		
+		if(col==0) return this.getKind_name();
+		else if(col==1) return Integer.toString(this.getKind_sum());
+		
+		else return "";
+	}
 	
 	
 	
