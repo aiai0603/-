@@ -3,7 +3,9 @@ package cn.edu.zucc.takeaway.control;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import com.mysql.jdbc.Connection;
 
@@ -130,6 +132,70 @@ public class ExampleUserManager  {
 					e1.printStackTrace();
 				}
 		}
+	}
+	public List<BeanUsers> searchUser(String name) throws DbException{
+		java.sql.Connection conn=null;
+		List<BeanUsers> result = new ArrayList<BeanUsers>();
+		try {
+			
+			conn=DBUtil.getConnection();
+			String sql="select user_no,user_name,pwd,sex,email,city,vip,vip_end,tele from users where user_name like ?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			String str="%"+name+"%";
+			pst.setString(1,str);
+			java.sql.ResultSet rs=pst.executeQuery();
+			
+			while(rs.next())
+			{
+				BeanUsers u=new BeanUsers();
+				u.setUser_no(rs.getInt(1));
+				u.setUser_name(rs.getString(2));
+				u.setPwd(rs.getString(3));
+				u.setSex(rs.getInt(4));
+				u.setEmail(rs.getString(5));
+				u.setCity(rs.getString(6));
+				u.setVip(rs.getBoolean(7));
+				u.setTele(rs.getString(9));
+				if(u.isVip())
+				{
+					u.setVip_end(rs.getTimestamp(8));
+					if(u.getVip_end().getTime()<System.currentTimeMillis())
+					{
+						sql="update users set vip=0 where user_no=?";
+						pst=conn.prepareStatement(sql);
+						pst.setInt(1,u.getUser_no());
+						pst.execute();
+						u.setVip(false);
+					}
+				}
+				result.add(u);
+			}
+			
+			
+			
+		
+			
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
+		
+		
+	
+		
 	}
 
 
@@ -383,6 +449,31 @@ public class ExampleUserManager  {
 				}
 		}
 		
+	}
+
+	public void deleteUser(BeanUsers book) throws DbException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="delete from users where user_no=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, book.getUser_no());
+			pst.execute();
+			pst.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
 	}
 
 }
