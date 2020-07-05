@@ -3,6 +3,7 @@ package cn.edu.zucc.takeaway.model;
 import java.util.Date;
 
 public class BeanShops {
+	public static final  String[] tableTitles= {"商家名","星级"};
 	private int shop_no;
 	private String shop_name;
 	private int level;
@@ -39,7 +40,16 @@ public class BeanShops {
 		this.sum_sale = sum_sale;
 	}
 	
-	
+
+	public String getCell(int col){
+		
+		if(col==0) return this.getShop_name();
+		else if(col==1) return Integer.toString(this.getLevel());
+		else if(col==2) return Double.toString(this.getAvg_consume());
+		else if(col==3) return Double.toString(this.getSum_sale());
+		else return "";
+	}
+
 	
 	
 	
