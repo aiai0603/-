@@ -54,10 +54,10 @@ public class FrmModify extends JDialog implements ActionListener {
 	private JRadioButton rb2 =new JRadioButton("女");
 	private JRadioButton rb3 =new JRadioButton("保密");
 	ButtonGroup g=new ButtonGroup();
+	private int uesrid;
 	
-	
-	public FrmModify(Frame f, String s, boolean b) {
-		super(f, s, b);
+	public FrmModify(FrmMain frmMain, String s, boolean b) {
+		super(frmMain, s, b);
 		g.add(rb1);
 		g.add(rb2);
 		g.add(rb3);
@@ -119,6 +119,75 @@ public class FrmModify extends JDialog implements ActionListener {
 				(int) (height - this.getHeight()) / 2);
 		this.btnCancel.addActionListener(this);
 		this.btnOk.addActionListener(this);
+		
+		 uesrid=BeanUsers.currentLoginUser.getUser_no();
+	}
+	public FrmModify(FrmDeleteUser frmDeleteUser, String s, boolean b) {
+		super(frmDeleteUser, s, b);
+		g.add(rb1);
+		g.add(rb2);
+		g.add(rb3);
+		toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		toolBar.add(this.btnOk);
+		toolBar.add(btnCancel);
+		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
+		workPane.add(labelUser);
+		edtUserId.setText(FrmDeleteUser.book.getUser_name());
+		workPane.add(edtUserId);
+		workPane.add(tele);
+		
+		edtele.setText(FrmDeleteUser.book.getTele());
+		workPane.add(edtele);
+		workPane.add(email);
+		edemail.setText(FrmDeleteUser.book.getEmail());
+		workPane.add(edemail);
+		workPane.add(labelCity);
+		int i;
+		for( i=0;i<city.length;i++)
+		{
+			if(city[i].equals(FrmDeleteUser.book.getCity()))
+				break;
+		}
+		
+		cb.setSelectedIndex(i);
+		workPane.add(cb);
+		
+		workPane.add(labeloldPwd);
+		
+		workPane.add(edtoldPwd);
+		edtoldPwd.setText(FrmDeleteUser.book.getPwd());
+		workPane.add(labelPwd);
+		
+		workPane.add(edtPwd);
+		workPane.add(labelPwd2);
+		workPane.add(edtPwd2);
+		
+		workPane.add(sex);
+		
+		
+		workPane.add(rb1);
+		workPane.add(rb2);
+		workPane.add(rb3);
+		if(FrmDeleteUser.book.getSex()==1)
+		rb1.setSelected(true);
+		else if(FrmDeleteUser.book.getSex()==2)
+		rb2.setSelected(true);
+		else 
+    	rb3.setSelected(true);
+    
+    
+		
+		
+		this.getContentPane().add(workPane, BorderLayout.CENTER);
+		this.setSize(290, 290);
+		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		this.setLocation((int) (width - this.getWidth()) / 2,
+				(int) (height - this.getHeight()) / 2);
+		this.btnCancel.addActionListener(this);
+		this.btnOk.addActionListener(this);
+		
+		uesrid=FrmDeleteUser.book.getUser_no();
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -126,7 +195,7 @@ public class FrmModify extends JDialog implements ActionListener {
 		if(e.getSource()==this.btnCancel)
 			this.setVisible(false);
 		else if(e.getSource()==this.btnOk){
-			int userid=BeanUsers.currentLoginUser.getUser_no();
+			
 			String username=this.edtUserId.getText();
 			String telenum=this.edtele.getText();
 			String emailtext=this.edemail.getText();
@@ -149,7 +218,7 @@ public class FrmModify extends JDialog implements ActionListener {
 			
 			
 			try {
-				ex.modify(userid,username,oldpwd,pwd1,pwd2,telenum,emailtext,cityname,sexchoose);
+				ex.modify(uesrid,username,oldpwd,pwd1,pwd2,telenum,emailtext,cityname,sexchoose);
 			} catch (BaseException e1) {
 				// TODO 自动生成的 catch 块
 				
