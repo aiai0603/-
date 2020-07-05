@@ -2,6 +2,7 @@ package cn.edu.zucc.takeaway.model;
 
 public class BeanGoods {
 	
+	public static final  String[] tableTitles= {"商品","价格","折扣"};
 	private int good_no;
 	private int kind_no;
 	private String good_name;
@@ -38,7 +39,13 @@ public class BeanGoods {
 		this.good_sale = good_sale;
 	}
 	
-	
+	public String getCell(int col){
+		
+		if(col==0) return this.getGood_name();
+		else if(col==1) return Double.toString(this.getGood_price());
+		else if(col==2) return Double.toString(this.getGood_sale());
+		else return "";
+	}
 	
 	
 	
