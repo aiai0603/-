@@ -37,15 +37,15 @@ public class FrmMain extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_user=new JMenu("用户管理");
-    private JMenu menu_step=new JMenu("步骤管理");
+    private JMenu menu_shop=new JMenu("商家管理");
     private JMenu menu_static=new JMenu("查询统计");
     private JMenu menu_more=new JMenu("更多");
     
-    private JMenuItem  menuItem_Deleteuser=new JMenuItem("删除用户");
-    private JMenuItem  menuItem_listuser=new JMenuItem("统计用户");
-    private JMenuItem  menuItem_AddStep=new JMenuItem("添加步骤");
-    private JMenuItem  menuItem_DeleteStep=new JMenuItem("删除步骤");
-    private JMenuItem  menuItem_startStep=new JMenuItem("开始步骤");
+    private JMenuItem  menuItem_Deleteuser=new JMenuItem("管理信息");
+    private JMenuItem  menuItem_listuser=new JMenuItem("统计数据");
+    private JMenuItem  menuItem_AddShop=new JMenuItem("商家信息");
+    private JMenuItem  menuItem_AddYouhui=new JMenuItem("商家优惠");
+    private JMenuItem  menuItem_AddCount=new JMenuItem("商家满减");
     private JMenuItem  menuItem_finishStep=new JMenuItem("结束步骤");
     private JMenuItem  menuItem_moveUpStep=new JMenuItem("步骤上移");
     private JMenuItem  menuItem_moveDownStep=new JMenuItem("步骤下移");
@@ -109,17 +109,17 @@ public class FrmMain extends JFrame implements ActionListener {
 			this.setTitle("管理系统");
 			this.menu_user.add(this.menuItem_Deleteuser); this.menuItem_Deleteuser.addActionListener(this);
 			this.menu_user.add(this.menuItem_listuser); this.menuItem_listuser.addActionListener(this);
-		    this.menu_step.add(this.menuItem_AddStep); this.menuItem_AddStep.addActionListener(this);
-		    this.menu_step.add(this.menuItem_DeleteStep); this.menuItem_DeleteStep.addActionListener(this);
-		    this.menu_step.add(this.menuItem_startStep); this.menuItem_startStep.addActionListener(this);
-		    this.menu_step.add(this.menuItem_finishStep); this.menuItem_finishStep.addActionListener(this);
-		    this.menu_step.add(this.menuItem_moveUpStep); this.menuItem_moveUpStep.addActionListener(this);
-		    this.menu_step.add(this.menuItem_moveDownStep); this.menuItem_moveDownStep.addActionListener(this);
+		    this.menu_shop.add(this.menuItem_AddShop); this.menuItem_AddShop.addActionListener(this);
+		    this.menu_shop.add(this.menuItem_AddYouhui); this.menuItem_AddYouhui.addActionListener(this);
+		    this.menu_shop.add(this.menuItem_AddCount); this.menuItem_AddCount.addActionListener(this);
+		   // this.menu_shop.add(this.menuItem_finishStep); this.menuItem_finishStep.addActionListener(this);
+		  //  this.menu_shop.add(this.menuItem_moveUpStep); this.menuItem_moveUpStep.addActionListener(this);
+		  //  this.menu_shop.add(this.menuItem_moveDownStep); this.menuItem_moveDownStep.addActionListener(this);
 		    this.menu_static.add(this.menuItem_static1); this.menuItem_static1.addActionListener(this);
 		    this.menu_more.add(this.menuItem_modifyPwd); this.menuItem_modifyPwd.addActionListener(this);
 		    this.menu_more.add(this.menuItem_AddAdmin);this.menuItem_AddAdmin.addActionListener(this);
 		    menubar.add(menu_user);
-		    menubar.add(menu_step);
+		    menubar.add(menu_shop);
 		    menubar.add(menu_static);
 		    menubar.add(menu_more);
 		    this.setJMenuBar(menubar);
@@ -184,7 +184,13 @@ public class FrmMain extends JFrame implements ActionListener {
 		
 			
 			
-		}
+		}	else if(e.getSource()==this.menuItem_Deleteuser){
+			FrmDeleteUser dlg=new FrmDeleteUser (this,"用户管理",true);
+			dlg.setVisible(true);
+		} else if(e.getSource()==this.menuItem_AddShop) {
+			FrmShop dlg=new FrmShop(this,"商家管理",true);
+			dlg.setVisible(true);
+		} 
 		
 	}
 
