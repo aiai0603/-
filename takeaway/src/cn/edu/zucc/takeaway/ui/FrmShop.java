@@ -260,6 +260,18 @@ public class FrmShop extends JFrame implements ActionListener {
 			
 		}else if(e.getSource()==this.btnSearch){
 			reloadPlanTable(this.edtKeyword.getText());
+			
+			good=null;
+			curkind=null;
+			tblGoodData=null;
+			tblStepData=null;
+			tabGoodModel.setDataVector(tblGoodData,tblGoodTitle);
+			dataTableGood.validate();
+			dataTableGood.repaint();
+			tabStepModel.setDataVector(tblStepData,tblStepTitle);
+			this.dataTableStep.validate();
+			this.dataTableStep.repaint();
+			
 		}
 		
 		else if(e.getSource()==this.menuItem_AddKind){
@@ -340,66 +352,38 @@ public class FrmShop extends JFrame implements ActionListener {
 				BeanGoods g=good.get(i);
 				ex.deletegood(g);
 				JOptionPane.showMessageDialog(null, "删除成功", "成功",JOptionPane.INFORMATION_MESSAGE); 
-				FrmShop.this.reloadGoodTabel(i);
 				
-			} catch (BaseException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			
-			
-		}
-		/*
-		else if(e.getSource()==this.menuItem_moveUpStep){
-			int i=FrmShop.this.dataTableStep.getSelectedRow();
-			if(i<0) {
-				JOptionPane.showMessageDialog(null, "请选择步骤", "错误",JOptionPane.ERROR_MESSAGE);
-				
-				return;
-			}
-			try {
-				PersonPlanUtil.stepManager.moveUp(this.planSteps.get(i));
-				JOptionPane.showMessageDialog(null, "操作成功", "成功",JOptionPane.INFORMATION_MESSAGE);
-				
-				int j=FrmShop.this.dataTablePlan.getSelectedRow();
+				int j=FrmShop.this.dataTableStep.getSelectedRow();
 				if(j<0) {
 					return;
 				}
-				FrmShop.this.reloadPlanStepTabel(j);
+				
+				FrmShop.this.reloadGoodTabel(j);
+				
 			} catch (BaseException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-		}
-		else if(e.getSource()==this.menuItem_moveDownStep){
-			int i=FrmShop.this.dataTableStep.getSelectedRow();
-			if(i<0) {
-				JOptionPane.showMessageDialog(null, "请选择步骤", "错误",JOptionPane.ERROR_MESSAGE);
-				
-				return;
-			}
-			try {
-				PersonPlanUtil.stepManager.moveDown(this.planSteps.get(i));
-				JOptionPane.showMessageDialog(null, "操作成功", "成功",JOptionPane.INFORMATION_MESSAGE);
-				
-				int j=FrmShop.this.dataTablePlan.getSelectedRow();
-				if(j<0) {
-					return;
-				}
-				FrmShop.this.reloadPlanStepTabel(j);
-			} catch (BaseException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-		}
-		else if(e.getSource()==this.menuItem_static1){
 			
-		}
-		else if(e.getSource()==this.menuItem_modifyPwd){
-			FrmModifyPwd dlg=new FrmModifyPwd(this,"密码修改",true);
+			
+		}else if(e.getSource()==this.menuItem_ModifyGood){
+			int i=FrmShop.this.dataTableGood.getSelectedRow();
+			if(i<0) {
+				JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			FrmModifyGood dlg=new FrmModifyGood(this,"修改商品",true,good.get(i));
 			dlg.setVisible(true);
+			int j=FrmShop.this.dataTableStep.getSelectedRow();
+			if(j<0) {
+				return;
+			}
+			
+			FrmShop.this.reloadGoodTabel(j);
+			
+			
 		}
 		
-	}*/
+		
 }
 }
