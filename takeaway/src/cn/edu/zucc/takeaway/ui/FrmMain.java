@@ -190,7 +190,11 @@ public class FrmMain extends JFrame implements ActionListener {
 		} else if(e.getSource()==this.menuItem_AddShop) {
 			FrmShop dlg=new FrmShop(this,"商家管理",true);
 			dlg.setVisible(true);
+		} else if(e.getSource()==this.menuItem_AddCount) {
+			FrmCount dlg=new FrmCount(this,"满减管理",true);
+			dlg.setVisible(true);
 		} 
+		
 		
 	}
 
