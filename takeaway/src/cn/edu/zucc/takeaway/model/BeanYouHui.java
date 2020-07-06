@@ -1,8 +1,10 @@
 package cn.edu.zucc.takeaway.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BeanYouHui {
+	public static final  String[] tableTitles= {"优惠金额","需求订单数","开始时间","结束时间"};
 	private int youhui_no;
 	private int shop_no;
 	private double youhui_sale;
@@ -45,6 +47,17 @@ public class BeanYouHui {
 	public void setEndday(Date endday) {
 		this.endday = endday;
 	}
+	
+public String getCell(int col){
+		
+		SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd");
+		if(col==0) return Double.toString(this.getYouhui_sale());
+		else if(col==1) return Integer.toString(this.getRequest());
+		else if(col==2) return f.format(this.getStartday());
+		else if(col==3) return f.format(this.getEndday());
+		else return "";
+	}
+	
 	
 	
 	
