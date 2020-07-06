@@ -24,9 +24,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import cn.edu.zucc.takeaway.control.ExampleUserManager;
 import cn.edu.zucc.takeaway.model.BeanAdmin;
 import cn.edu.zucc.takeaway.model.BeanUsers;
 import cn.edu.zucc.takeaway.ui.FrmLogin;
+import cn.edu.zucc.takeaway.util.BaseException;
 
 
 
@@ -38,7 +40,7 @@ public class FrmMain extends JFrame implements ActionListener {
 	private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_user=new JMenu("用户管理");
     private JMenu menu_shop=new JMenu("商家管理");
-    private JMenu menu_static=new JMenu("查询统计");
+    private JMenu menu_ride=new JMenu("骑手管理");
     private JMenu menu_more=new JMenu("更多");
     
     private JMenuItem  menuItem_Deleteuser=new JMenuItem("管理信息");
@@ -46,16 +48,11 @@ public class FrmMain extends JFrame implements ActionListener {
     private JMenuItem  menuItem_AddShop=new JMenuItem("商家信息");
     private JMenuItem  menuItem_AddYouhui=new JMenuItem("商家优惠");
     private JMenuItem  menuItem_AddCount=new JMenuItem("商家满减");
-    private JMenuItem  menuItem_finishStep=new JMenuItem("结束步骤");
-    private JMenuItem  menuItem_moveUpStep=new JMenuItem("步骤上移");
-    private JMenuItem  menuItem_moveDownStep=new JMenuItem("步骤下移");
-    
+    private JMenuItem  menuItem_RideAdd=new JMenuItem("骑手操作");
+    private JMenuItem  menuItem_Ridelist=new JMenuItem("统计数据");
     private JMenuItem  menuItem_modifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AddAdmin=new JMenuItem("新增管理员");
-    
-    private JMenuItem  menuItem_static1=new JMenuItem("统计1");
-    
-    
+  
 	private FrmLogin dlgLogin=null;
 	private JPanel statusBar = new JPanel();
 	private JLabel label=new JLabel();
@@ -70,9 +67,15 @@ public class FrmMain extends JFrame implements ActionListener {
 	public FrmMain(){
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		
-		FrmLoading dlgLogin = new FrmLoading(this,"外卖助手",true);
-		dlgLogin.setVisible(true);
-		
+		//FrmLoading dlgLogin = new FrmLoading(this,"外卖助手",true);
+		//dlgLogin.setVisible(true);
+		try {
+			BeanAdmin.currentLoginAdmin= (new ExampleUserManager()).loginAdmin("1" ,"1");
+			uskind=2;
+		} catch (BaseException e1) {
+			// TODO 自动生成的 catch 块
+			e1.printStackTrace();
+		}
 	
 		if(uskind==1)
 		{
@@ -112,15 +115,17 @@ public class FrmMain extends JFrame implements ActionListener {
 		    this.menu_shop.add(this.menuItem_AddShop); this.menuItem_AddShop.addActionListener(this);
 		    this.menu_shop.add(this.menuItem_AddYouhui); this.menuItem_AddYouhui.addActionListener(this);
 		    this.menu_shop.add(this.menuItem_AddCount); this.menuItem_AddCount.addActionListener(this);
-		   // this.menu_shop.add(this.menuItem_finishStep); this.menuItem_finishStep.addActionListener(this);
+		  // this.menu_shop.add(this.menuItem_finishStep); this.menuItem_finishStep.addActionListener(this);
 		  //  this.menu_shop.add(this.menuItem_moveUpStep); this.menuItem_moveUpStep.addActionListener(this);
 		  //  this.menu_shop.add(this.menuItem_moveDownStep); this.menuItem_moveDownStep.addActionListener(this);
-		    this.menu_static.add(this.menuItem_static1); this.menuItem_static1.addActionListener(this);
+		    this.menu_ride.add(this.menuItem_RideAdd); this.menuItem_RideAdd.addActionListener(this);
+		    this.menu_ride.add(this.menuItem_Ridelist); this.menuItem_Ridelist.addActionListener(this);
+		
 		    this.menu_more.add(this.menuItem_modifyPwd); this.menuItem_modifyPwd.addActionListener(this);
 		    this.menu_more.add(this.menuItem_AddAdmin);this.menuItem_AddAdmin.addActionListener(this);
 		    menubar.add(menu_user);
 		    menubar.add(menu_shop);
-		    menubar.add(menu_static);
+		    menubar.add(menu_ride);
 		    menubar.add(menu_more);
 		    this.setJMenuBar(menubar);
 			   statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -192,6 +197,12 @@ public class FrmMain extends JFrame implements ActionListener {
 			dlg.setVisible(true);
 		} else if(e.getSource()==this.menuItem_AddCount) {
 			FrmCount dlg=new FrmCount(this,"满减管理",true);
+			dlg.setVisible(true);
+		} else if(e.getSource()==this.menuItem_AddYouhui) {
+			FrmYouhui dlg=new FrmYouhui(this,"优惠管理",true);
+			dlg.setVisible(true);
+		} else if(e.getSource()==this.menuItem_RideAdd) {
+			FrmRide dlg=new FrmRide(this,"骑手管理",true);
 			dlg.setVisible(true);
 		} 
 		
