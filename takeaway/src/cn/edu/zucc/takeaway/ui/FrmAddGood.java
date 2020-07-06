@@ -76,6 +76,7 @@ public class FrmAddGood extends JDialog implements ActionListener {
 			String name=this.jt.getText();
 			if(this.jt1.getText().equals(""))
 			{
+				
 				JOptionPane.showMessageDialog(null, "价格为空","错误",JOptionPane.ERROR_MESSAGE);
 				return ;
 			}
@@ -84,12 +85,13 @@ public class FrmAddGood extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(null, "价格为空","错误",JOptionPane.ERROR_MESSAGE);
 				return ;
 			}
-			double p1=Double.parseDouble(this.jt1.getText());
-			double p2=Double.parseDouble(this.jt2.getText());
+			
 			ExampleGoodManager ex=new ExampleGoodManager();
 			try {
+				double p1=Double.parseDouble(this.jt1.getText());
+				double p2=Double.parseDouble(this.jt2.getText());
 				ex.addgood(kind,name,p1,p2);
-			} catch (BaseException e1) {
+			} catch (Exception e1) {
 				// TODO 自动生成的 catch 块
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
 					return;
