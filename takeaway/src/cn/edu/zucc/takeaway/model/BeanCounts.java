@@ -1,6 +1,7 @@
 package cn.edu.zucc.takeaway.model;
 
 public class BeanCounts {
+	public static final  String[] tableTitles= {"要求金额","减免金额","能否与优惠券叠加"};
 	private int count_no;
 	private int shop_no;
 	private double ac_money;//满减金额
@@ -38,6 +39,13 @@ public class BeanCounts {
 		this.together = together;
 	}
 	
+	public String getCell(int col){
+		
+		if(col==0) return Double.toString(this.getAc_money());
+		else if(col==1) return Double.toString(this.getCount_sale());
+		else if(col==2) return Boolean.toString(this.isTogether());
+		else return "";
+	}
 	
 	
 }
