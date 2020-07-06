@@ -89,6 +89,10 @@ public class ExampleGoodManager {
 			pst.setDouble(3, p1);
 			pst.setDouble(4, p2);
 			pst.execute();
+			sql="update kinds set kind_sum=kind_sum+1 where kind_no=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1,kind.getKind_no());
+			pst.execute();
 			
 			pst.close();
 		
@@ -117,6 +121,13 @@ public class ExampleGoodManager {
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1, beanGoods.getGood_no());
 			pst.execute();
+			
+			sql="update kinds set kind_sum=kind_sum-1 where kind_no=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1,beanGoods.getKind_no());
+			pst.execute();
+			
+			
 			pst.close();
 		
 		} catch (SQLException e) {
@@ -132,6 +143,51 @@ public class ExampleGoodManager {
 					e.printStackTrace();
 				}
 		}
+	}
+
+	public void modifygood(BeanGoods beanGoods, String name, double p1, double p2) throws BusinessException, DbException {
+		// TODO 自动生成的方法存根
+		if(name==null || "".equals(name) || name.length()>20){
+			throw new BusinessException("商品名必须是1-20个字！");
+		}
+		if(p2>p1) {
+			throw new BusinessException("优惠价不得高于初始价！");
+		}
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from goods where good_name=? and kind_no = ?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setString(1,name);
+			pst.setInt(2,beanGoods.getKind_no());
+			java.sql.ResultSet rs=pst.executeQuery();
+			if(rs.next())throw new BusinessException("商品已经存在！");
+			
+			sql="update goods set good_name=?,good_price=?,good_sale=? where good_no=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(4,beanGoods.getGood_no());
+			pst.setString(1, name);
+			pst.setDouble(2, p1);
+			pst.setDouble(3, p2);
+			pst.execute();
+			
+		
+			pst.close();
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
 	}
 
 }
