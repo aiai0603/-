@@ -46,9 +46,9 @@ public class FrmCount extends JFrame implements ActionListener {
     private JPanel toolBar = new JPanel();
 	private JTextField edtKeyword = new JTextField(10);
 	private Button btnSearch = new Button("查询商家");
-	private Button btnAdd = new Button("添加优惠");
-	private Button btnModify = new Button("修改优惠");
-	private Button btnDelete = new Button("删除优惠");
+	private Button btnAdd = new Button("添加满减");
+	private Button btnModify = new Button("修改满减");
+	private Button btnDelete = new Button("删除满减");
 	private FrmLogin dlgLogin=null;
 
 	
@@ -111,7 +111,6 @@ public class FrmCount extends JFrame implements ActionListener {
 	public FrmCount(FrmMain frmMain, String string, boolean b){
 		super(string);
 	    toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
 		toolBar.add(btnSearch);
 		toolBar.add(edtKeyword);
 		toolBar.add(btnAdd);this.btnAdd.addActionListener(this);
@@ -124,13 +123,8 @@ public class FrmCount extends JFrame implements ActionListener {
 	    js1.setPreferredSize(new Dimension(550, 10));
 	    JScrollPane js2=new JScrollPane(this.dataTableCount);
 	    js2.setPreferredSize(new Dimension(100, 10));
-	    
-	  
 	   this.getContentPane().add(js1, BorderLayout.WEST);
 	   this.getContentPane().add(js2, BorderLayout.CENTER);
-	  
-	    
-	   
 	   
 	    this.dataTableShop.addMouseListener(new MouseAdapter (){
 
