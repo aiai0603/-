@@ -56,7 +56,7 @@ public class FrmRide extends JDialog implements ActionListener {
 		try {
 			ExampleRideManager ex=new ExampleRideManager();
 			ride=ex.loadrider(this.edtKeyword.getText());
-			tblData =new Object[ride.size()][5];
+			tblData =new Object[ride.size()][4];
 			for(int i=0;i<ride.size();i++){
 				tblData[i][0]=ride.get(i).getRider_name();
 				SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
