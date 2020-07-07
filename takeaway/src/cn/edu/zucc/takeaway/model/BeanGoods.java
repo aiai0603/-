@@ -2,7 +2,7 @@ package cn.edu.zucc.takeaway.model;
 
 public class BeanGoods {
 	
-	public static final  String[] tableTitles= {"商品","价格","折扣"};
+	public static final  String[] tableTitles= {"商品","价格","折扣价格"};
 	private int good_no;
 	private int kind_no;
 	private String good_name;
