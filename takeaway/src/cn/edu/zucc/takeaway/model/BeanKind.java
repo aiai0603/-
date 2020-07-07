@@ -1,7 +1,7 @@
 package cn.edu.zucc.takeaway.model;
 
 public class BeanKind {
-	
+	public static final  String[] tableTitles2= {"类别名","含有商品数"};
 	public static final  String[] tableTitles= {"类别名"};
 	private int shop_no;
 	private int kind_no;
