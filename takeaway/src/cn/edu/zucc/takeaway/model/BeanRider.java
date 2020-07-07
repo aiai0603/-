@@ -7,6 +7,13 @@ public class BeanRider {
 	private String rider_name;
 	private Date rider_start;
 	private int rider_level;
+	public boolean isRide_site() {
+		return ride_site;
+	}
+	public void setRide_site(boolean ride_site) {
+		this.ride_site = ride_site;
+	}
+	private boolean ride_site;
 	
 	
 	public int getRider_no() {
