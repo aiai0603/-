@@ -60,7 +60,7 @@ public class ExampleShopManager  {
 		try {
 			
 			conn=DBUtil.getConnection();
-			String sql="select * from shops where shop_name like ?";
+			String sql="select * from shops where shop_name like ? order by level desc";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			String str="%"+name+"%";
 			pst.setString(1,str);
@@ -94,6 +94,129 @@ public class ExampleShopManager  {
 		
 		
 	}
+	public List<BeanShops> loadshopbyavg2(String name) throws DbException{
+		
+		java.sql.Connection conn=null;
+		List<BeanShops> result = new ArrayList<BeanShops>();
+		try {
+			
+			conn=DBUtil.getConnection();
+			String sql="select * from shops where shop_name like ? order by avg_consume desc";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			String str="%"+name+"%";
+			pst.setString(1,str);
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+			{
+				BeanShops u=new BeanShops();
+				u.setShop_no(rs.getInt(1));
+				u.setShop_name(rs.getString(2));
+				u.setLevel(rs.getInt(3));
+				u.setAvg_consume(rs.getDouble(4));
+				u.setSum_sale(rs.getDouble(5));
+				result.add(u);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
+		
+	}
+public List<BeanShops> loadshopbyavg1(String name) throws DbException{
+		
+		java.sql.Connection conn=null;
+		List<BeanShops> result = new ArrayList<BeanShops>();
+		try {
+			
+			conn=DBUtil.getConnection();
+			String sql="select * from shops where shop_name like ? order by avg_consume asc";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			String str="%"+name+"%";
+			pst.setString(1,str);
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+			{
+				BeanShops u=new BeanShops();
+				u.setShop_no(rs.getInt(1));
+				u.setShop_name(rs.getString(2));
+				u.setLevel(rs.getInt(3));
+				u.setAvg_consume(rs.getDouble(4));
+				u.setSum_sale(rs.getDouble(5));
+				result.add(u);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
+		
+	}
+public List<BeanShops> loadshopbysum(String name) throws DbException{
+	
+	java.sql.Connection conn=null;
+	List<BeanShops> result = new ArrayList<BeanShops>();
+	try {
+		
+		conn=DBUtil.getConnection();
+		String sql="select * from shops where shop_name like ? order by sum_sale desc";
+		java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+		String str="%"+name+"%";
+		pst.setString(1,str);
+		java.sql.ResultSet rs=pst.executeQuery();
+		while(rs.next())
+		{
+			BeanShops u=new BeanShops();
+			u.setShop_no(rs.getInt(1));
+			u.setShop_name(rs.getString(2));
+			u.setLevel(rs.getInt(3));
+			u.setAvg_consume(rs.getDouble(4));
+			u.setSum_sale(rs.getDouble(5));
+			result.add(u);
+		}
+		rs.close();
+		pst.close();
+		return result;
+	} catch (SQLException e) {
+		e.printStackTrace();
+		throw new DbException(e);
+	}
+	finally{
+		if(conn!=null)
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	
+}
 	public void deleteshop(BeanShops curshop) throws DbException, BusinessException {
 		// TODO 自动生成的方法存根
 		java.sql.Connection conn=null;
