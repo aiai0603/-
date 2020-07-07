@@ -30,6 +30,11 @@ public class ExampleUserManager  {
 		if(tele.length()!=11){
 			throw new BusinessException("手机号必须是11位");
 		}
+		for(int i=0;i<tele.length();i++) {
+			if(!Character.isDigit(tele.charAt(i))) {
+				throw new BusinessException("电话含有非法字符");
+			}
+		}
 		if(!email.matches(e)){
 			throw new BusinessException("邮箱格式错误");
 		}
@@ -392,6 +397,12 @@ public class ExampleUserManager  {
 		}
 		if(!email.matches(ex)){
 			throw new BusinessException("邮箱格式错误");
+		}
+		for(int i=0;i<tele.length();i++) {
+			if(!Character.isDigit(tele.charAt(i))) {
+				throw new BusinessException("电话含有非法字符");
+			}
+				
 		}
 		
 		
