@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class BeanShops {
 	public static final  String[] tableTitles= {"商家名","星级"};
+	public static final  String[] tableTitles2= {"商家名","星级","人均消费","销量"};
 	private int shop_no;
 	private String shop_name;
 	private int level;
