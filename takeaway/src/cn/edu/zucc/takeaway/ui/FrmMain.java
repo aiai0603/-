@@ -37,6 +37,7 @@ import cn.edu.zucc.takeaway.util.BaseException;
 public class FrmMain extends JFrame implements ActionListener {
 	public static int uskind=0;
 	private static final long serialVersionUID = 1L;
+	//管理员系统
 	private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_user=new JMenu("用户管理");
     private JMenu menu_shop=new JMenu("商家管理");
@@ -57,10 +58,14 @@ public class FrmMain extends JFrame implements ActionListener {
 	private JPanel statusBar = new JPanel();
 	private JLabel label=new JLabel();
 	
+	//用户端
 	private JMenuBar menubar2=new JMenuBar(); ;
 	private JMenu menu_xx=new JMenu("信息管理");
-	private JMenuItem  menuItem_change=new JMenuItem("账号信息");
-	private JMenuItem  menuItem_vip=new JMenuItem("vip管理");
+	private JMenuItem  menuItem_change=new JMenuItem("我的账号");
+	private JMenuItem  menuItem_vip=new JMenuItem("我的vip");
+	private JMenu menu_order=new JMenu("点餐管理");
+	private JMenuItem  menuItem_address=new JMenuItem("我的地址");
+	private JMenuItem  menuItem_order=new JMenuItem("我的订单");
 	
 
 	
@@ -70,8 +75,8 @@ public class FrmMain extends JFrame implements ActionListener {
 		//FrmLoading dlgLogin = new FrmLoading(this,"外卖助手",true);
 		//dlgLogin.setVisible(true);
 		try {
-			BeanAdmin.currentLoginAdmin= (new ExampleUserManager()).loginAdmin("1" ,"1");
-			uskind=2;
+			BeanUsers.currentLoginUser= (new ExampleUserManager()).login("1" ,"1");
+			uskind=1;
 		} catch (BaseException e1) {
 			// TODO 自动生成的 catch 块
 			e1.printStackTrace();
@@ -83,6 +88,9 @@ public class FrmMain extends JFrame implements ActionListener {
 			this.menu_xx.add(this.menuItem_change); this.menuItem_change.addActionListener(this);
 		    this.menu_xx.add(this.menuItem_vip); this.menuItem_vip.addActionListener(this);
 			menubar2.add(menu_xx);
+			this.menu_order.add(this.menuItem_address); this.menuItem_address.addActionListener(this);
+		    this.menu_order.add(this.menuItem_order); this.menuItem_order.addActionListener(this);
+			menubar2.add(menu_order);
 			this.setJMenuBar(menubar2);
 		    statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		    if(BeanUsers.currentLoginUser.isVip())
@@ -90,11 +98,9 @@ public class FrmMain extends JFrame implements ActionListener {
 		    	SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd");
 		    	   label.setText("您好! VIP用户 "+BeanUsers.currentLoginUser.getUser_name()+"     您的会员将在"+f.format(BeanUsers.currentLoginUser.getVip_end())+
 		    			   "到期!");
-		    	   
 				    statusBar.add(label);
 				    this.getContentPane().add(statusBar,BorderLayout.SOUTH);
 		    }else {
-		    	
 		    	 label.setText("您好! 用户 "+BeanUsers.currentLoginUser.getUser_name()+"        开通会员，尽享优惠");
 				 statusBar.add(label);
 				 this.getContentPane().add(statusBar,BorderLayout.SOUTH);
@@ -115,12 +121,8 @@ public class FrmMain extends JFrame implements ActionListener {
 		    this.menu_shop.add(this.menuItem_AddShop); this.menuItem_AddShop.addActionListener(this);
 		    this.menu_shop.add(this.menuItem_AddYouhui); this.menuItem_AddYouhui.addActionListener(this);
 		    this.menu_shop.add(this.menuItem_AddCount); this.menuItem_AddCount.addActionListener(this);
-		  // this.menu_shop.add(this.menuItem_finishStep); this.menuItem_finishStep.addActionListener(this);
-		  //  this.menu_shop.add(this.menuItem_moveUpStep); this.menuItem_moveUpStep.addActionListener(this);
-		  //  this.menu_shop.add(this.menuItem_moveDownStep); this.menuItem_moveDownStep.addActionListener(this);
 		    this.menu_ride.add(this.menuItem_RideAdd); this.menuItem_RideAdd.addActionListener(this);
 		    this.menu_ride.add(this.menuItem_Ridelist); this.menuItem_Ridelist.addActionListener(this);
-		
 		    this.menu_more.add(this.menuItem_modifyPwd); this.menuItem_modifyPwd.addActionListener(this);
 		    this.menu_more.add(this.menuItem_AddAdmin);this.menuItem_AddAdmin.addActionListener(this);
 		    menubar.add(menu_user);
@@ -204,7 +206,10 @@ public class FrmMain extends JFrame implements ActionListener {
 		} else if(e.getSource()==this.menuItem_RideAdd) {
 			FrmRide dlg=new FrmRide(this,"骑手管理",true);
 			dlg.setVisible(true);
-		} 
+		} else if(e.getSource()==this.menuItem_address){
+			FrmAddress dlg=new FrmAddress(this,"地址管理",true);
+			dlg.setVisible(true);
+		}
 		
 		
 	}
