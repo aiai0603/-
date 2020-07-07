@@ -29,8 +29,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import cn.edu.zucc.takeaway.model.BeanRider;
 import cn.edu.zucc.takeaway.model.BeanUsers;
 import cn.edu.zucc.takeaway.util.BaseException;
+import cn.edu.zucc.takeaway.util.BusinessException;
 import cn.edu.zucc.takeaway.util.DbException;
 import cn.edu.zucc.takeaway.control.*;
 
@@ -38,28 +40,35 @@ import cn.edu.zucc.takeaway.control.*;
 
 
 public class FrmRide extends JDialog implements ActionListener {
-	public static BeanUsers book;
+	public static BeanRider book;
 	private JPanel toolBar = new JPanel();
+	private Button btnAdd = new Button("添加");
 	private Button btnModify = new Button("修改");
 	private Button btnDelete = new Button("删除");
 	private JTextField edtKeyword = new JTextField(10);
 	private Button btnSearch = new Button("查询");
-	private Object tblTitle[]={"用户名","手机","城市","邮箱","VIP状态"};
+	private Object tblTitle[]={"骑手名","创建时间","等级","配送状态"};
 	private Object tblData[][];
-	List<BeanUsers> user=null;
+	List<BeanRider> ride=null;
 	DefaultTableModel tablmod=new DefaultTableModel();
 	private JTable dataTable=new JTable(tablmod);
 	private void reloadTable(){
 		try {
-			ExampleUserManager ex=new ExampleUserManager();
-			user=ex.searchUser(this.edtKeyword.getText());
-			tblData =new Object[user.size()][5];
-			for(int i=0;i<user.size();i++){
-				tblData[i][0]=user.get(i).getUser_name();
-				tblData[i][1]=user.get(i).getTele();
-				tblData[i][2]=user.get(i).getCity();
-				tblData[i][3]=user.get(i).getEmail();
-				tblData[i][4]=user.get(i).isVip();
+			ExampleRideManager ex=new ExampleRideManager();
+			ride=ex.loadrider(this.edtKeyword.getText());
+			tblData =new Object[ride.size()][5];
+			for(int i=0;i<ride.size();i++){
+				tblData[i][0]=ride.get(i).getRider_name();
+				SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				tblData[i][1]=f.format(ride.get(i).getRider_start());
+				if(ride.get(i).getRider_level()==1)
+				tblData[i][2]="新人";
+				else if(ride.get(i).getRider_level()==2)
+				tblData[i][2]="正式员工";
+				else
+				tblData[i][2]="单王";	
+				
+				tblData[i][3]=ride.get(i).isRide_site();
 			}
 			tablmod.setDataVector(tblData,tblTitle);
 			this.dataTable.validate();
@@ -75,6 +84,7 @@ public class FrmRide extends JDialog implements ActionListener {
 	public FrmRide (Frame f, String s, boolean b) {
 		super(f, s, b);
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+		toolBar.add(btnAdd);
 		toolBar.add(btnModify);
 		toolBar.add(btnDelete);
 		toolBar.add(edtKeyword);
@@ -91,16 +101,11 @@ public class FrmRide extends JDialog implements ActionListener {
 				(int) (height - this.getHeight()) / 2);
 
 		this.validate();
-
-		
+		this.btnAdd.addActionListener(this);
 		this.btnModify.addActionListener(this);
 		this.btnDelete.addActionListener(this);
 		this.btnSearch.addActionListener(this);
-		this.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				//System.exit(0);
-			}
-		});
+		
 	}
 
 	@Override
@@ -112,11 +117,17 @@ public class FrmRide extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(null,  "请选择用户","提示",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			book=this.user.get(i);
-		//	FrmModify dlg=new FrmModify(this,"信息修改",true);
-		//	dlg.setVisible(true);
+			book=this.ride.get(i);
+			FrmModifyRide dlg=new FrmModifyRide(this,"信息修改",true, book);
+			dlg.setVisible(true);
 			this.reloadTable();
 			}
+		else if(e.getSource()==this.btnAdd){
+			FrmAddRide dlg=new FrmAddRide(this,"新增骑手",true);
+			dlg.setVisible(true);
+			this.reloadTable();
+			
+		}
 		
 		else if(e.getSource()==this.btnDelete){
 			int i=this.dataTable.getSelectedRow();
@@ -124,15 +135,14 @@ public class FrmRide extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(null,  "请选择用户","提示",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			book=this.user.get(i);
-			ExampleUserManager ex=new ExampleUserManager();
+			book=this.ride.get(i);
+			ExampleRideManager ex=new ExampleRideManager();
 			try {
-				ex.deleteUser(book);
-			
-			} catch (DbException e1) {
+				ex.deleteride(book);
+			}  catch (BaseException e1) {
 				// TODO 自动生成的 catch 块
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
-			return;
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"提示",JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 			JOptionPane.showMessageDialog(null, "修改成功,","成功",JOptionPane.INFORMATION_MESSAGE);
 			this.reloadTable();
