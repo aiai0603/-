@@ -168,5 +168,41 @@ public void addkind(BeanShops bean ,String name) throws DbException, BusinessExc
 				}
 		}
 	}
+	public List<BeanKind> loadhavingkind(BeanShops beanshop) throws DbException {
+		java.sql.Connection conn=null;
+		List<BeanKind> result = new ArrayList<BeanKind>();
+		try {
+			
+			conn=DBUtil.getConnection();
+			String sql="select * from kinds where shop_no = ? and kind_sum!=0";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,beanshop.getShop_no());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+			{
+				BeanKind u=new BeanKind();
+				u.setKind_no(rs.getInt(1));
+				u.setKind_name(rs.getString(3));
+				u.setShop_no(rs.getInt(2));
+				u.setKind_sum(rs.getInt(4));
+				result.add(u);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
 
 }
