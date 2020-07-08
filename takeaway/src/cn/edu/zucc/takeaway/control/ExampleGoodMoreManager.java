@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cn.edu.zucc.takeaway.model.BeanAddresser;
 import cn.edu.zucc.takeaway.model.BeanGoodMore;
 import cn.edu.zucc.takeaway.model.BeanGoods;
 import cn.edu.zucc.takeaway.model.BeanKind;
+import cn.edu.zucc.takeaway.model.BeanOwnerCount;
 import cn.edu.zucc.takeaway.model.BeanShops;
 import cn.edu.zucc.takeaway.model.BeanUsers;
 import cn.edu.zucc.takeaway.util.BusinessException;
@@ -141,7 +143,6 @@ public class ExampleGoodMoreManager {
 			rs.next();
 			double price1=rs.getDouble(1);
 			double price2=rs.getDouble(2);
-			
 			sql="update good_more set good_count=?,good_price=?,good_sale=? where good_no=? and order_no=?";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1,count);
@@ -169,6 +170,132 @@ public class ExampleGoodMoreManager {
 					e.printStackTrace();
 				}
 		}
+	}
+
+	public double sumall(int orderid, int user_no) throws DbException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		double result = 0;
+		try {
+			
+			conn=DBUtil.getConnection();
+			String sql="select * from good_more where  order_no=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,orderid);
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+			{
+				result+=rs.getDouble(5);
+			}
+			rs.close();
+			pst.close();
+			
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
+
+	public double sumall2(int orderid, int user_no) throws DbException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		double result = 0;
+		try {
+			
+			conn=DBUtil.getConnection();
+			String sql="select * from good_more where  order_no=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,orderid);
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+			{
+				result+=rs.getDouble(4);
+			}
+			rs.close();
+			pst.close();
+			
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
+
+	public double sumall3(int id, int user_no, BeanOwnerCount by, boolean b) throws DbException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		double result = 0;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from good_more where  order_no=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,id);
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+			{
+				result+=rs.getDouble(5);
+			}
+			if(by!=null)
+			{
+				sql="select count_money from owner_count where youhui_no=? and user_no=?";
+				pst=conn.prepareStatement(sql);
+				pst.setInt(1, by.getYouhui_no());
+				pst.setInt(2, by.getUser_no());
+				rs=pst.executeQuery();
+				while(rs.next())
+				{
+					result-=rs.getDouble(1);
+				}
+				if(result<0)
+					result=0;
+			}
+			if(b==true)
+			{
+				ExampleCountManager ex2=new ExampleCountManager();
+				double count=ex2.offercount(id,this.sumall2(id,BeanUsers.currentLoginUser.getUser_no())).getCount_sale();
+				result-=count;
+				if(result<0)
+					result=0;
+			}
+			
+		
+			rs.close();
+			pst.close();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return result;
 	}
 
 	
