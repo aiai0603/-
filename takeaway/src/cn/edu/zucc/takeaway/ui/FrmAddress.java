@@ -46,6 +46,7 @@ public class FrmAddress extends JDialog implements ActionListener {
 	private Button btnAdd = new Button("添加");
 	private Button btnModify = new Button("修改");
 	private Button btnDelete = new Button("删除");
+	private Button btnOk = new Button("选择");
 	private JTextField edtKeyword = new JTextField(10);
 	private Button btnSearch = new Button("按具体地址查询");
 	private Object tblTitle[]={"省","市","具体地址","联系人姓名","联系电话"};
@@ -100,6 +101,35 @@ public class FrmAddress extends JDialog implements ActionListener {
 		
 	}
 
+	public FrmAddress(FrmSum f, String s, boolean b) {
+		// TODO 自动生成的构造函数存根
+		super(f, s, b);
+		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+		toolBar.add(btnAdd);
+		toolBar.add(btnModify);
+		toolBar.add(btnDelete);
+		toolBar.add(edtKeyword);
+		toolBar.add(btnSearch);
+		toolBar.add(btnOk);
+		this.getContentPane().add(toolBar, BorderLayout.NORTH);
+		//提取现有数据
+		this.reloadTable();
+		this.getContentPane().add(new JScrollPane(this.dataTable), BorderLayout.CENTER);
+		// 屏幕居中显示
+		this.setSize(800, 600);
+		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		this.setLocation((int) (width - this.getWidth()) / 2,
+				(int) (height - this.getHeight()) / 2);
+
+		this.validate();
+		this.btnAdd.addActionListener(this);
+		this.btnModify.addActionListener(this);
+		this.btnDelete.addActionListener(this);
+		this.btnSearch.addActionListener(this);
+		this.btnOk.addActionListener(this);
+		
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -145,6 +175,17 @@ public class FrmAddress extends JDialog implements ActionListener {
 		
 		else if(e.getSource()==this.btnSearch){
 			this.reloadTable();
+		}	
+		
+		else if(e.getSource()==this.btnOk){
+			int i=this.dataTable.getSelectedRow();
+			if(i<0) {
+				JOptionPane.showMessageDialog(null,  "请选择地址","提示",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			FrmSum.ad=ad.get(i);
+			this.setVisible(false);
+			
 		}
 		
 	}
