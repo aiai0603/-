@@ -55,7 +55,6 @@ public class FrmAddAddress extends JDialog implements ActionListener {
 	String city3[]= {"SuZhou","NanJing","YangZhou"};
 	
 	
-	
 	public FrmAddAddress(FrmAddress frmAddress, String s, boolean b) {
 		super(frmAddress, s, b);
 	
