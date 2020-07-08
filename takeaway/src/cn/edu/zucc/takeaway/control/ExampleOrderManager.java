@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 import cn.edu.zucc.takeaway.model.BeanAddresser;
+import cn.edu.zucc.takeaway.model.BeanCounts;
+import cn.edu.zucc.takeaway.model.BeanOwnerCount;
 import cn.edu.zucc.takeaway.model.BeanRider;
 import cn.edu.zucc.takeaway.model.BeanShops;
 import cn.edu.zucc.takeaway.model.BeanUsers;
@@ -119,6 +121,83 @@ public class ExampleOrderManager  {
 				}
 		}
 	}
+	
+	public void upload(int id, BeanAddresser ad, BeanOwnerCount by, double fina, double truesum, BeanCounts countsum, Date afterDate) throws DbException, BusinessException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		try {
+			String sql=null;
+			 java.sql.PreparedStatement pst=null;
+			conn=DBUtil.getConnection();
+			if(ad==null)
+			{
+				throw new BusinessException("请选择地址！");
+			}
+			if(by!=null&&countsum!=null)
+			{
+				 sql="update orders set address_no=?,count_no=?,youhui_no=?,money=?,true_money=?,order_time=?,arrive=?,site=1 where order_no=?";
+				 pst=conn.prepareStatement(sql);
+					pst.setInt(1, ad.getAddress_no());
+					pst.setInt(2, countsum.getCount_no());
+					pst.setInt(3, by.getYouhui_no());
+					pst.setDouble(4, truesum);
+					pst.setDouble(5, fina);
+					pst.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
+					pst.setTimestamp(7, new java.sql.Timestamp(afterDate.getTime()));
+					pst.setInt(8, id);
+			}
+			else if(by==null&&countsum!=null)
+			{
+				sql="update orders set address_no=?,count_no=?,money=?,true_money=?,order_time=?,arrive=?,site=1 where order_no=?";
+				pst=conn.prepareStatement(sql);
+					pst.setInt(1, ad.getAddress_no());
+					pst.setInt(2, countsum.getCount_no());
+					
+					pst.setDouble(3, truesum);
+					pst.setDouble(4, fina);
+					pst.setTimestamp(5, new java.sql.Timestamp(System.currentTimeMillis()));
+					pst.setTimestamp(6, new java.sql.Timestamp(afterDate.getTime()));
+					pst.setInt(7, id);
+			}else if(by!=null&&countsum==null)
+			{
+				sql="update orders set address_no=?,youhui_no=?,money=?,true_money=?,order_time=?,arrive=?,site=1 where order_no=?";
+				pst=conn.prepareStatement(sql);
+					pst.setInt(1, ad.getAddress_no());
+					pst.setInt(2, by.getYouhui_no());
+					pst.setDouble(3, truesum);
+					pst.setDouble(4, fina);
+					pst.setTimestamp(5, new java.sql.Timestamp(System.currentTimeMillis()));
+					pst.setTimestamp(6, new java.sql.Timestamp(afterDate.getTime()));
+					pst.setInt(7, id);
+			}else {
+				sql="update orders set address_no=?,money=?,true_money=?,order_time=?,arrive=?,site=1 where order_no=?";
+				 pst=conn.prepareStatement(sql);
+					pst.setInt(1, ad.getAddress_no());
+					pst.setDouble(2, truesum);
+					pst.setDouble(3, fina);
+					pst.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
+					pst.setTimestamp(5, new java.sql.Timestamp(afterDate.getTime()));
+					pst.setInt(6, id);
+			}
+			pst.execute();
+			pst.close();
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
+	
+	
 /*
 	public void deleteadd(BeanAddresser book) throws DbException {
 		// TODO 自动生成的方法存根
