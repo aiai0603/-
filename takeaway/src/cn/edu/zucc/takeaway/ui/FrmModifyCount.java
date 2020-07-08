@@ -44,9 +44,6 @@ public class FrmModifyCount extends JDialog implements ActionListener {
 	private JLabel labelVip = new JLabel("减免消费额：");
 	private JTextField jt2=new JTextField(15);
 	
-	private JLabel label = new JLabel("能否与优惠券叠加：                       ");
-	String sure[]= {" 是 "," 否 "};
-	JComboBox<String> cb=new JComboBox<String>(sure);
 	
 	private BeanCounts count ;
 	public FrmModifyCount(FrmCount frmCount, String s, boolean b, BeanCounts beanCounts) {
@@ -62,15 +59,8 @@ public class FrmModifyCount extends JDialog implements ActionListener {
 		workPane.add(labelVip);
 		workPane.add(jt2);
 		jt2.setText(Double.toString(beanCounts.getCount_sale()));
-		workPane.add(label);
-		workPane.add(cb);
-		if(beanCounts.isTogether())
-		{
-			cb.setSelectedIndex(0);
-		}else
-		{
-			cb.setSelectedIndex(1);
-		}
+	
+		
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		this.setSize(290, 160);
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -102,7 +92,7 @@ public class FrmModifyCount extends JDialog implements ActionListener {
 			try {
 				double p1=Double.parseDouble(this.jt1.getText());
 				double p2=Double.parseDouble(this.jt2.getText());
-				ex.modifycount(count,p1,p2,cb.getSelectedIndex());
+				ex.modifycount(count,p1,p2);
 			} catch (Exception e1) {
 				// TODO 自动生成的 catch 块
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
