@@ -4,13 +4,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BeanYouHui {
-	public static final  String[] tableTitles= {"优惠金额","需求订单数","开始时间","结束时间"};
+	public static final  String[] tableTitles= {"优惠金额","需求订单数","开始时间","结束时间","是否可以和满减叠加"};
 	private int youhui_no;
 	private int shop_no;
 	private double youhui_sale;
 	private int request;
 	private Date startday;
 	private Date endday;
+	private Boolean together;
+	public boolean isTogether() {
+		return together;
+	}
+	public void setTogether(boolean together) {
+		this.together = together;
+	}
 	public int getYouhui_no() {
 		return youhui_no;
 	}
@@ -55,6 +62,7 @@ public String getCell(int col){
 		else if(col==1) return Integer.toString(this.getRequest());
 		else if(col==2) return f.format(this.getStartday());
 		else if(col==3) return f.format(this.getEndday());
+		else if(col==4) return Boolean.toString(this.isTogether());
 		else return "";
 	}
 	
