@@ -41,6 +41,7 @@ public class ExampleYouhuiManager {
 				u.setRequest(rs.getInt(4));
 				u.setStartday(rs.getTimestamp(5));
 				u.setEndday(rs.getTimestamp(6));
+				u.setTogether(rs.getBoolean(7));
 				result.add(u);
 			}
 			rs.close();
@@ -64,7 +65,7 @@ public class ExampleYouhuiManager {
 	}
 	
 
-	public void addyouhui(BeanShops shop, int p1, double p2, String string, String string2) throws BusinessException, ParseException, DbException {
+	public void addyouhui(BeanShops shop, int p1, double p2, String string, String string2, int i) throws BusinessException, ParseException, DbException {
 		// TODO 自动生成的方法存根
 		if(p1>=10)throw new BusinessException("需求订单不得高于10单");
 		java.sql.Connection conn=null;
@@ -81,15 +82,19 @@ public class ExampleYouhuiManager {
 			java.sql.Timestamp d1=new java.sql.Timestamp(f.parse(string).getTime());
 			java.sql.Timestamp d2=new java.sql.Timestamp(f.parse(string2).getTime());
 			if(f.parse(string2).getTime()<f.parse(string).getTime())throw new BusinessException("结束日期不得早于开始日期");
-			sql="insert into youhui(shop_no,youhui_sale,request,startday,endday) values(?,?,?,?,?)";
+			sql="insert into youhui(shop_no,youhui_sale,request,startday,endday,together) values(?,?,?,?,?,?)";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, shop.getShop_no());
 			pst.setDouble(2,p2);
 			pst.setInt(3, p1);
 			pst.setTimestamp(4, d1);
 			pst.setTimestamp(5, d2);
-			pst.execute();
+			if(i==0)
+			pst.setBoolean(6, false);
+			else
+			pst.setBoolean(6, true);
 			
+			pst.execute();
 			pst.close();
 		
 		} catch (SQLException e) {
@@ -132,7 +137,7 @@ public class ExampleYouhuiManager {
 		}
 	}
 
-	public void modifyyouhui(BeanYouHui by, int p1, double p2, String string, String string2) throws BusinessException, ParseException, DbException {
+	public void modifyyouhui(BeanYouHui by, int p1, double p2, String string, String string2,int i) throws BusinessException, ParseException, DbException {
 		// TODO 自动生成的方法存根
 		if(p1>=10)throw new BusinessException("需求订单不得高于10单");
 		java.sql.Connection conn=null;
@@ -142,13 +147,18 @@ public class ExampleYouhuiManager {
 			java.sql.Timestamp d1=new java.sql.Timestamp(f.parse(string).getTime());
 			java.sql.Timestamp d2=new java.sql.Timestamp(f.parse(string2).getTime());
 			if(f.parse(string2).getTime()<f.parse(string).getTime())throw new BusinessException("结束日期不得早于开始日期");
-			String sql="update youhui set youhui_sale=?,request=?,startday=?,endday=? where youhui_no=?";
+			String sql="update youhui set youhui_sale=?,request=?,startday=?,endday=?,together=? where youhui_no=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setDouble(1,p2);
 			pst.setInt(2, p1);
 			pst.setTimestamp(3, d1);
 			pst.setTimestamp(4, d2);
-			pst.setInt(5, by.getYouhui_no());
+			pst.setInt(6, by.getYouhui_no());
+			if(i==0)
+				pst.setBoolean(5, false);
+				else
+				pst.setBoolean(5, true);
+				
 			pst.execute();
 			pst.close();
 		
