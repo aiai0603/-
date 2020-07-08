@@ -1,12 +1,22 @@
 package cn.edu.zucc.takeaway.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 public class BeanOwnerCount {
 	
+	public static final  String[] tableTitles= {"优惠价格","截止日期","数量"};
 	private int shop_no;
 	private int youhui_no;
+	private int user_no;
+	public int getUser_no() {
+		return user_no;
+	}
+	public void setUser_no(int user_no) {
+		this.user_no = user_no;
+	}
+
 	private double count_money;
 	private int num;
 	private Date end_date;
@@ -41,6 +51,7 @@ public class BeanOwnerCount {
 		this.end_date = end_date;
 	}
 
+	
 	
 
 	
