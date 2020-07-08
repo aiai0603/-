@@ -47,6 +47,9 @@ public class FrmModifyYouhui extends JDialog implements ActionListener {
 	private JTextField jt3=new JTextField(20);
 	private BeanYouHui By=null;
 	SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd");
+	private JLabel label = new JLabel("能否与优惠券叠加：                       ");
+	String sure[]= {" 否 ", " 是 "};
+	JComboBox<String> cb=new JComboBox<String>(sure);
 	
 	public FrmModifyYouhui(FrmYouhui frmYouhui, String s, boolean b, BeanYouHui beanYouHui) {
 		super(frmYouhui, s, b);
@@ -66,8 +69,14 @@ public class FrmModifyYouhui extends JDialog implements ActionListener {
 		workPane.add(labele);
 		workPane.add(jt3);
 		jt3.setText(f.format(beanYouHui.getEndday()));
+		workPane.add(label);
+		workPane.add(cb);
+		if(beanYouHui.isTogether())
+		cb.setSelectedIndex(1);
+		else
+		cb.setSelectedIndex(0);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
-		this.setSize(320, 200);
+		this.setSize(320, 240);
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
@@ -97,7 +106,7 @@ public class FrmModifyYouhui extends JDialog implements ActionListener {
 			try {
 				int p1=Integer.parseInt(this.jt.getText());
 				double p2=Double.parseDouble(this.jt1.getText());
-				ex.modifyyouhui(By,p1,p2,jt2.getText(),jt3.getText());
+				ex.modifyyouhui(By,p1,p2,jt2.getText(),jt3.getText(),cb.getSelectedIndex());
 			} catch (Exception e1) {
 				// TODO 自动生成的 catch 块
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
