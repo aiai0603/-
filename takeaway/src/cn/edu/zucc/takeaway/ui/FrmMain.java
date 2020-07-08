@@ -96,8 +96,7 @@ public class FrmMain extends JFrame implements ActionListener {
 	
 	String sort[]= {"高星级优先","消费最低优先","消费最高优先","销量高优先"};
 	JComboBox<String> cb=new JComboBox<String>(sort);
-	
-	
+
 	List<BeanShops> allshops=null;
 	
 	private void reloadPlanTable(String name){
@@ -120,8 +119,9 @@ public class FrmMain extends JFrame implements ActionListener {
 	public FrmMain(){
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		
-		//FrmLoading dlgLogin = new FrmLoading(this,"外卖助手",true);
-		//dlgLogin.setVisible(true);
+		FrmLoading dlgLogin = new FrmLoading(this,"外卖助手",true);
+		dlgLogin.setVisible(true);
+		/*
 		try {
 			BeanUsers.currentLoginUser= (new ExampleUserManager()).login("1" ,"1");
 			uskind=1;
@@ -129,6 +129,7 @@ public class FrmMain extends JFrame implements ActionListener {
 			// TODO 自动生成的 catch 块
 			e1.printStackTrace();
 		}
+		*/
 	
 		if(uskind==1)
 		{
