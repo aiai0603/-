@@ -43,6 +43,9 @@ import cn.edu.zucc.takeaway.util.DbException;
 
 public class FrmBuy extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
+
+
+	public static int ok=0;
 	
    
 	private FrmLogin dlgLogin=null;
@@ -153,8 +156,8 @@ public class FrmBuy extends JFrame implements ActionListener {
 		   toolBar.add(btnChange);
 		   toolBar.add(btnCount);
 		   toolBar.add(btnexit);
-			this.getContentPane().add(toolBar, BorderLayout.SOUTH);
-		
+		   this.getContentPane().add(toolBar, BorderLayout.SOUTH);
+			
 			
 			  title.setLayout(new FlowLayout(FlowLayout.LEFT));
 			  title.add(gwc);
@@ -164,7 +167,6 @@ public class FrmBuy extends JFrame implements ActionListener {
 			  title.add(goods);
 			  goods.setFont(new Font (Font.DIALOG, Font.BOLD, 30));
 			  title.add(btnBuy);
-			
 			  btnBuy.setFont(new Font (Font.DIALOG, Font.BOLD, 15));
 			  title.add(btnSee);
 			  btnSee.setFont(new Font (Font.DIALOG, Font.BOLD, 15));
@@ -187,6 +189,7 @@ public class FrmBuy extends JFrame implements ActionListener {
 	   this.btnBuy.addActionListener(this);
 	   this.btnUnbuy.addActionListener(this);
 	   this.btnChange.addActionListener(this);
+	   this.btnCount.addActionListener(this);
 	  
 	    this.dataTableKind.addMouseListener(new MouseAdapter (){
 
@@ -247,6 +250,14 @@ public class FrmBuy extends JFrame implements ActionListener {
 			FrmCountModify dlg=new FrmCountModify(this,"修改数量",true,orderid,goodmore.get(j));
 			dlg.setVisible(true);
 			reloadbuyTabel();
+		
+		}else if(e.getSource()==this.btnCount){
+			FrmSum dlg=new FrmSum(this,"结算订单",true,orderid);
+			dlg.setVisible(true);
+			if(ok==1)
+			{
+				this.setVisible(false);
+			}
 		
 		}
 		
