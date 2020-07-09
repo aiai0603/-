@@ -63,7 +63,50 @@ public class ExampleYouhuiManager {
 		
 		
 	}
-	
+public List<BeanYouHui> loadyouhui2(BeanShops beanshop) throws DbException{
+		
+		java.sql.Connection conn=null;
+		List<BeanYouHui> result = new ArrayList<BeanYouHui>();
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from youhui where shop_no = ?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,beanshop.getShop_no());
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+			{
+				if(rs.getTimestamp(6).getTime()>System.currentTimeMillis()&&rs.getTimestamp(5).getTime()<System.currentTimeMillis())
+				{
+					BeanYouHui u=new BeanYouHui();
+					u.setYouhui_no(rs.getInt(1));
+					u.setShop_no(rs.getInt(2));
+					u.setYouhui_sale(rs.getDouble(3));
+					u.setRequest(rs.getInt(4));
+					u.setStartday(rs.getTimestamp(5));
+					u.setEndday(rs.getTimestamp(6));
+					u.setTogether(rs.getBoolean(7));
+					result.add(u);
+				}
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
+		
+	}
 
 	public void addyouhui(BeanShops shop, int p1, double p2, String string, String string2, int i) throws BusinessException, ParseException, DbException {
 		// TODO 自动生成的方法存根
