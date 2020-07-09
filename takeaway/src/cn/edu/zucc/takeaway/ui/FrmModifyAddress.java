@@ -65,6 +65,22 @@ public class FrmModifyAddress extends JDialog implements ActionListener {
 		workPane.add(cb);
 		cb.setSelectedItem(book.getSheng());
 		workPane.add(labelshi);
+		 if(book.getSheng().equals("ZheJiang")) {
+      	   cb1.removeAllItems();
+      	   for(int i=0;i<city1.length;i++){
+      	   cb1.addItem(city1[i]);
+         }
+      }else if(book.getSheng().equals("ShangHai")){
+      	   cb1.removeAllItems();
+      	   for(int i=0;i<city2.length;i++){
+      	   cb1.addItem(city2[i]);
+         }
+      }else if(book.getSheng().equals("JiangSu")){
+      	   cb1.removeAllItems();
+      	   for(int i=0;i<city3.length;i++){
+      	   cb1.addItem(city3[i]);
+         }
+      }
 		workPane.add(cb1);
 		cb1.setSelectedItem(book.getShi());
 		workPane.add(labeladd);
