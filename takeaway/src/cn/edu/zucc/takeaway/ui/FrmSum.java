@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -162,17 +164,35 @@ public class FrmSum extends JDialog implements ActionListener {
 		this.address.addActionListener(this);
 		id=orderid;
 		resum();
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				by=null;
+				ad=null;
+				resum();
+			}
+		});
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==this.btnCancel)
+		{
+			this. by=null;
+			this. ad=null;
+			resum();
 			this.setVisible(false);
+		}
+			
 		else if(e.getSource()==this.btnOk){
 		
 			ExampleOrderManager ex=new ExampleOrderManager();
+			ExampleOwnerCountManager ex2=new ExampleOwnerCountManager();
+			ExampleGiveManager ex3=new ExampleGiveManager();
 			try {
 			ex.upload(id,ad,by,fina,truesum,countsum,afterDate);
-				
+			if(by!=null)
+			ex2.deleteowner(by);
+			
+			ex3.addgive(BeanUsers.currentLoginUser.getUser_no(), id);
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
