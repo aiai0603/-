@@ -106,7 +106,97 @@ public class ExampleOwnerCountManager {
 		
 		
 	}
+
+	public List<BeanOwnerCount> loadallowner(int user_no, String string) throws DbException {
+		java.sql.Connection conn=null;
+		List<BeanOwnerCount> result = new ArrayList<BeanOwnerCount>();
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select owner_count.youhui_no,owner_count.user_no,owner_count.count_money,owner_count.num,"
+						+ "owner_count.end_date,owner_count.shop_no,shops.shop_name,youhui.together from owner_count,shops,youhui"
+						+ " where youhui.youhui_no=owner_count.youhui_no and shops.shop_no=owner_count.shop_no and owner_count.user_no=? and "
+						+ "shops.shop_name like ?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, user_no);
+			pst.setString(2, "%"+string+"%");
+			java.sql.ResultSet rs=pst.executeQuery();
+			while(rs.next())
+			{
+				BeanOwnerCount u=new BeanOwnerCount();
+					u.setYouhui_no(rs.getInt(1));
+					u.setUser_no(rs.getInt(2));
+					u.setCount_money(rs.getDouble(3));
+					u.setNum(rs.getInt(4));
+					u.setEnd_date(rs.getTimestamp(5));
+					u.setShop_no(rs.getInt(6));
+					u.setShop_name(rs.getString(7));
+					u.setTogether(rs.getBoolean(8));
+				
+				result.add(u);
+			}
+			rs.close();
+			pst.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
 	
+	public void deleteowner(BeanOwnerCount c) throws DbException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select num from owner_count where youhui_no=? and user_no=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, c.getYouhui_no());
+			pst.setInt(2, c.getUser_no());
+			java.sql.ResultSet rs=pst.executeQuery();
+			rs.next();
+			if(rs.getInt(1)==1)
+			{
+				sql="delete from owner_count where youhui_no=? and user_no=?";
+				pst=conn.prepareStatement(sql);
+				pst.setInt(1, c.getYouhui_no());
+				pst.setInt(2, c.getUser_no());
+				pst.execute();
+				pst.close();
+			}
+			else {
+				sql="update owner_count set num=num-1 where youhui_no=? and user_no=?";
+				pst=conn.prepareStatement(sql);
+				pst.setInt(1, c.getYouhui_no());
+				pst.setInt(2, c.getUser_no());
+				pst.execute();
+				pst.close();
+			}
+				rs.close();
+				
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
 	/*
 	public List<BeanYouHui> loadyouhui(BeanShops beanshop) throws DbException{
 		
