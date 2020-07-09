@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class BeanYouHui {
 	public static final  String[] tableTitles= {"优惠金额","需求订单数","开始时间","结束时间","是否可以和满减叠加"};
+	public static final  String[] tableTitles2= {"需求订单数","优惠金额","结束时间"};
 	private int youhui_no;
 	private int shop_no;
 	private double youhui_sale;
