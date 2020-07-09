@@ -298,6 +298,71 @@ public class ExampleGoodMoreManager {
 		return result;
 	}
 
+	public void isempty(int id) throws BusinessException, DbException {
+		java.sql.Connection conn=null;
+		double result = 0;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from good_more where  order_no=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,id);
+			java.sql.ResultSet rs=pst.executeQuery();
+			if(!rs.next())
+			{
+				throw new BusinessException("订单为空");
+			}
+			
+			rs.close();
+			pst.close();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
+		
+	}
+
+	public void deleteall(int id) throws DbException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="delete from good_more where order_no=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,id);
+			pst.execute();
+			sql="delete from orders where order_no=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1,id);
+			pst.execute();
+			pst.close();
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
+
 	
 
 
