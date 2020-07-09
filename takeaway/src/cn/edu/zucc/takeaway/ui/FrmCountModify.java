@@ -33,7 +33,7 @@ import cn.edu.zucc.takeaway.util.BaseException;
 public class FrmCountModify extends JDialog implements ActionListener {
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
-	private Button btnOk = new Button("购买");
+	private Button btnOk = new Button("修改");
 	private Button btnCancel = new Button("取消");
 	
 	private JLabel labelUser = new JLabel("数量：");
