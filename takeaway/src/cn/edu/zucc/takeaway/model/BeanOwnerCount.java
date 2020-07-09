@@ -10,6 +10,20 @@ public class BeanOwnerCount {
 	private int shop_no;
 	private int youhui_no;
 	private int user_no;
+	private String shop_name;
+	private Boolean together;
+	public Boolean getTogether() {
+		return together;
+	}
+	public void setTogether(Boolean together) {
+		this.together = together;
+	}
+	public String getShop_name() {
+		return shop_name;
+	}
+	public void setShop_name(String shop_name) {
+		this.shop_name = shop_name;
+	}
 	public int getUser_no() {
 		return user_no;
 	}
