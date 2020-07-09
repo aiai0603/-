@@ -11,6 +11,7 @@ import java.util.List;
 
 import cn.edu.zucc.takeaway.model.BeanAddresser;
 import cn.edu.zucc.takeaway.model.BeanCounts;
+import cn.edu.zucc.takeaway.model.BeanOrders;
 import cn.edu.zucc.takeaway.model.BeanOwnerCount;
 import cn.edu.zucc.takeaway.model.BeanRider;
 import cn.edu.zucc.takeaway.model.BeanShops;
@@ -23,28 +24,36 @@ import cn.edu.zucc.takeaway.util.DbException;
 
 public class ExampleOrderManager  {
 	
-	/*
-	public List<BeanAddresser> loadaddress(String name, int i) throws DbException{
+	
+	public List<BeanOrders> loadorder (String name, int i) throws DbException{
 		
 		java.sql.Connection conn=null;
-		List<BeanAddresser> result = new ArrayList<BeanAddresser>();
+		List<BeanOrders> result = new ArrayList<BeanOrders>();
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from addresses where address like ? and user_no=?";
+			String sql="select orders.order_no,orders.address_no,orders.rider_no,orders.count_no,"
+					+ "orders.shop_no,orders.youhui_no,orders.money,orders.true_money,orders.order_time"
+					+ ",orders.arrive,orders.site,orders.user_no,shops.shop_name  from orders,shops where shops.shop_no=orders.shop_no and shops.shop_name like ? and orders.user_no=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,"%"+name+"%");
 			pst.setInt(2, i);
 			java.sql.ResultSet rs=pst.executeQuery();
 			while(rs.next())
 			{
-				BeanAddresser u=new BeanAddresser();
-				u.setAddress_no(rs.getInt(1));
-				u.setUser_no(rs.getInt(2));
-				u.setSheng(rs.getString(3));
-				u.setShi(rs.getString(4));
-				u.setAddress(rs.getString(5));
-				u.setCall_user(rs.getString(6));
-				u.setAddress_tele(rs.getString(7));
+				BeanOrders u=new BeanOrders();
+				u.setOrder_no(rs.getInt(1));
+				u.setAddress_no(rs.getInt(2));
+				u.setRider_no(rs.getInt(3));
+				u.setCount_no(rs.getInt(4));
+				u.setShop_no(rs.getInt(5));
+				u.setYouhui_no(rs.getInt(6));
+				u.setMoney(rs.getDouble(7));
+				u.setTrue_money(rs.getDouble(8));
+				u.setOrder_time(rs.getTimestamp(9));
+				u.setArrive(rs.getTimestamp(10));
+				u.setSite(rs.getInt(11));
+				u.setUser_no(rs.getInt(12));
+				u.setShop_name(rs.getString(13));
 				result.add(u);
 			}
 			rs.close();
@@ -66,7 +75,7 @@ public class ExampleOrderManager  {
 		
 		
 	}
-*/
+
 	public int addorder(int userid,int shopid) throws DbException, BusinessException {
 		// TODO 自动生成的方法存根
 		
