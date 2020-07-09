@@ -1,0 +1,81 @@
+package cn.edu.zucc.takeaway.ui;
+
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Dialog;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
+import cn.edu.zucc.takeaway.control.*;
+import cn.edu.zucc.takeaway.model.BeanAddresser;
+import cn.edu.zucc.takeaway.model.BeanOwnerCount;
+import cn.edu.zucc.takeaway.util.BaseException;
+
+
+
+
+public class FrmExit extends JDialog implements ActionListener {
+	private JPanel toolBar = new JPanel();
+	private JPanel workPane = new JPanel();
+	private Button btnOk = new Button("确定");
+	private Button btnCancel = new Button("取消");
+	private JLabel labelUser = new JLabel("退出商家将清空你的购物车，您确定吗？");
+	private int id;
+	
+	public FrmExit(FrmBuy frmBuy, String s, boolean b, int orderid) {
+		super(frmBuy, s, b);
+	
+		toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		toolBar.add(this.btnOk);
+		toolBar.add(btnCancel);
+		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
+		workPane.add(labelUser);
+		setFont(new Font (Font.DIALOG, Font.BOLD, 20));
+		this.getContentPane().add(workPane, BorderLayout.CENTER);
+		this.setSize(290, 100);
+		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		this.setLocation((int) (width - this.getWidth()) / 2,
+				(int) (height - this.getHeight()) / 2);
+		this.btnCancel.addActionListener(this);
+		this.btnOk.addActionListener(this);
+		id=orderid;
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==this.btnCancel)
+			this.setVisible(false);
+		else if(e.getSource()==this.btnOk){
+			ExampleGoodMoreManager ex=new ExampleGoodMoreManager();
+			try {
+				ex.deleteall(id);
+			} catch (BaseException e1) {
+				// TODO 自动生成的 catch 块
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
+					return;
+				
+			}
+			FrmBuy.exit=1;
+			this.setVisible(false);
+		}
+			
+		
+	}
+
+
+}
