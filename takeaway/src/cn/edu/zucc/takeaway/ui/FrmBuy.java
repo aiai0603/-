@@ -50,9 +50,9 @@ public class FrmBuy extends JFrame implements ActionListener {
    
 	private FrmLogin dlgLogin=null;
 	private JPanel title = new JPanel();
-	private JLabel gwc =new JLabel("                购物车");
-	private JLabel kind =new JLabel("                                    商品类别");
-	private JLabel goods =new JLabel("                            商品                ");
+	private JLabel gwc =new JLabel("            购物车");
+	private JLabel kind =new JLabel("                         商品类别");
+	private JLabel goods =new JLabel("                                      商品        ");
 	
 	private JPanel toolBar = new JPanel();
 	private JButton btnBuy = new JButton("加入购物车");
@@ -61,6 +61,7 @@ public class FrmBuy extends JFrame implements ActionListener {
 	private JButton btnCount = new JButton("结算订单");
 	private JButton btnexit = new JButton("退出商家");
 	private JButton btnSee = new JButton("查看评论");
+	private JButton btnsale = new JButton("查看本店优惠");
 	
 	private Object tblbuyTitle[]=BeanGoodMore.tableTitles;
 	private Object tblbuyData[][];
@@ -88,6 +89,7 @@ public class FrmBuy extends JFrame implements ActionListener {
 	List<BeanGoodMore> goodmore=null;
 	List<BeanGoods> good=null;
 	private int orderid;
+	public static int exit=0;
 	private void reloadbuyTabel(){
 		try {
 			goodmore=(new ExampleGoodMoreManager()).loadgoodmore(orderid);
@@ -161,11 +163,14 @@ public class FrmBuy extends JFrame implements ActionListener {
 			
 			  title.setLayout(new FlowLayout(FlowLayout.LEFT));
 			  title.add(gwc);
+			  title.add(btnsale);
+			  btnsale.setFont(new Font (Font.DIALOG, Font.BOLD, 15));
 			  gwc.setFont(new Font (Font.DIALOG, Font.BOLD, 30));
 			  title.add(kind);
 			  kind.setFont(new Font (Font.DIALOG, Font.BOLD, 30));
 			  title.add(goods);
 			  goods.setFont(new Font (Font.DIALOG, Font.BOLD, 30));
+			
 			  title.add(btnBuy);
 			  btnBuy.setFont(new Font (Font.DIALOG, Font.BOLD, 15));
 			  title.add(btnSee);
@@ -190,6 +195,8 @@ public class FrmBuy extends JFrame implements ActionListener {
 	   this.btnUnbuy.addActionListener(this);
 	   this.btnChange.addActionListener(this);
 	   this.btnCount.addActionListener(this);
+	   this.btnexit.addActionListener(this);
+	   this.btnsale.addActionListener(this);
 	  
 	    this.dataTableKind.addMouseListener(new MouseAdapter (){
 
@@ -205,6 +212,20 @@ public class FrmBuy extends JFrame implements ActionListener {
 	    reloadPlanStepTabel(beanShops);
 	    reloadGoodTabel(0);
 	    reloadbuyTabel();
+	    
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				ExampleGoodMoreManager ex=new ExampleGoodMoreManager();
+				try {
+					ex.deleteall(id);
+				} catch (BaseException e1) {
+					// TODO 自动生成的 catch 块
+						JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
+						return;
+					
+				}
+			}
+		});
 	    //状态栏
 	    this.setExtendedState(Frame.MAXIMIZED_BOTH);
 	    this.setVisible(true);
@@ -252,14 +273,32 @@ public class FrmBuy extends JFrame implements ActionListener {
 			reloadbuyTabel();
 		
 		}else if(e.getSource()==this.btnCount){
-			FrmSum dlg=new FrmSum(this,"结算订单",true,orderid);
+			ExampleGoodMoreManager ex=new ExampleGoodMoreManager();
+			try {
+				ex.isempty(orderid);
+				FrmSum dlg=new FrmSum(this,"结算订单",true,orderid);
+				dlg.setVisible(true);
+				if(ok==1)
+				{
+					this.setVisible(false);
+				}
+			} catch (BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			} 
+			
+		
+		}else if(e.getSource()==this.btnexit){
+			FrmExit dlg=new FrmExit(this, "提示", true,orderid); 
 			dlg.setVisible(true);
-			if(ok==1)
-			{
+			if(exit==1) {
 				this.setVisible(false);
 			}
 		
+		}else if(e.getSource()==this.btnsale){
+			FrmShowSale dlg=new FrmShowSale(this, "商家优惠", true, curshop);
+			dlg.setVisible(true);
+			
 		}
-		
     }
 }
