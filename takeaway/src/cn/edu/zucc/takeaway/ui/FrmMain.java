@@ -3,6 +3,7 @@ package cn.edu.zucc.takeaway.ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -30,13 +31,16 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import cn.edu.zucc.takeaway.control.ExampleCountManager;
 import cn.edu.zucc.takeaway.control.ExampleOrderManager;
 import cn.edu.zucc.takeaway.control.ExampleShopManager;
 import cn.edu.zucc.takeaway.control.ExampleUserManager;
+import cn.edu.zucc.takeaway.control.ExampleYouhuiManager;
 import cn.edu.zucc.takeaway.model.BeanAdmin;
 import cn.edu.zucc.takeaway.model.BeanCounts;
 import cn.edu.zucc.takeaway.model.BeanShops;
 import cn.edu.zucc.takeaway.model.BeanUsers;
+import cn.edu.zucc.takeaway.model.BeanYouHui;
 import cn.edu.zucc.takeaway.ui.FrmLogin;
 import cn.edu.zucc.takeaway.util.BaseException;
 import cn.edu.zucc.takeaway.util.BusinessException;
@@ -70,7 +74,13 @@ public class FrmMain extends JFrame implements ActionListener {
 	private JPanel statusBar = new JPanel();
 	private JLabel label=new JLabel();
 	
+	
+	private JLabel count=new JLabel("                                                           集单送券活动");
+	private JLabel youhui=new JLabel("                                                    满减活动");
 	//用户端
+	private JMenu menu_sale=new JMenu("优惠管理");
+	private JMenuItem  menuItem_own=new JMenuItem("我的优惠券");
+	private JMenuItem  menuItem_give=new JMenuItem("我的集单");
 	private JMenuBar menubar2=new JMenuBar(); ;
 	private JMenu menu_xx=new JMenu("信息管理");
 	private JMenuItem  menuItem_change=new JMenuItem("我的账号");
@@ -94,10 +104,44 @@ public class FrmMain extends JFrame implements ActionListener {
 	DefaultTableModel tabCountModel=new DefaultTableModel();
 	private JTable dataTableCount=new JTable(tabCountModel);
 	
+	private Object tblYouhui[]=BeanYouHui.tableTitles2;
+	private Object tblYouhuiData[][];
+	DefaultTableModel tabYouhuiModel=new DefaultTableModel();
+	private JTable dataTableYouhui=new JTable(tabYouhuiModel);
+	
 	String sort[]= {"高星级优先","消费最低优先","消费最高优先","销量高优先"};
 	JComboBox<String> cb=new JComboBox<String>(sort);
 
 	List<BeanShops> allshops=null;
+	List<BeanCounts> allcount=null;
+	BeanShops curshop=null;
+	List<BeanYouHui> allyouhui;
+	
+	
+	private void reloadYouhuiTabel(int id){
+		if(id<0) return;
+		curshop=allshops.get(id);
+		try {
+			allyouhui=(new ExampleYouhuiManager()).loadyouhui2(curshop);
+		} catch (BaseException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd");
+		tblYouhuiData =new Object[allyouhui.size()][BeanYouHui.tableTitles2.length];
+		for(int i=0;i<allyouhui.size();i++){
+			
+				tblYouhuiData[i][0]=allyouhui.get(i).getRequest();
+				tblYouhuiData[i][1]=allyouhui.get(i).getYouhui_sale();
+				tblYouhuiData[i][2]=f.format(allyouhui.get(i).getEndday());
+			
+				
+		}
+		tabYouhuiModel.setDataVector(tblYouhuiData,tblYouhui);
+		this.dataTableYouhui.validate();
+		this.dataTableYouhui.repaint();
+	} 
+	
 	
 	private void reloadPlanTable(String name){
 		try {
@@ -115,6 +159,26 @@ public class FrmMain extends JFrame implements ActionListener {
 		this.dataTableShop.validate();
 		this.dataTableShop.repaint();
 	}
+	private void reloadCountTabel(int id){
+		if(id<0) return;
+		curshop=allshops.get(id);
+		try {
+			allcount=(new ExampleCountManager()).loadcount(curshop);
+		} catch (BaseException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		tblCountData =new Object[allcount.size()][BeanCounts.tableTitles.length];
+		for(int i=0;i<allcount.size();i++){
+			for(int j=0;j<BeanCounts.tableTitles.length;j++)
+				tblCountData[i][j]=allcount.get(i).getCell(j);
+		}
+		
+		tabCountModel.setDataVector(tblCountData,tblCount);
+		this.dataTableCount.validate();
+		this.dataTableCount.repaint();
+	} 
+	
 	
 	public FrmMain(){
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -129,8 +193,8 @@ public class FrmMain extends JFrame implements ActionListener {
 			// TODO 自动生成的 catch 块
 			e1.printStackTrace();
 		}
-		*/
-	
+		
+	*/
 		if(uskind==1)
 		{
 			toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -138,7 +202,10 @@ public class FrmMain extends JFrame implements ActionListener {
 			toolBar.add(btnSearch);
 			toolBar.add(cb);
 			toolBar.add(btnGo);
-			
+			toolBar.add(youhui);
+			youhui.setFont(new Font (Font.DIALOG, Font.CENTER_BASELINE, 24));
+			toolBar.add(count);
+			count.setFont(new Font (Font.DIALOG, Font.CENTER_BASELINE, 24));
 			this.btnSearch.addActionListener(this);
 			this.btnGo.addActionListener(this);
 			
@@ -224,14 +291,34 @@ public class FrmMain extends JFrame implements ActionListener {
 			this.menu_order.add(this.menuItem_address); this.menuItem_address.addActionListener(this);
 		    this.menu_order.add(this.menuItem_order); this.menuItem_order.addActionListener(this);
 			menubar2.add(menu_order);
+			this.menu_sale.add(this.menuItem_own); this.menuItem_own.addActionListener(this);
+		    this.menu_sale.add(this.menuItem_give); this.menuItem_give.addActionListener(this);
+			menubar2.add(menu_sale);
 			this.setJMenuBar(menubar2);
 		    statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		    JScrollPane js1=new JScrollPane(this.dataTableShop);
-		    js1.setPreferredSize(new Dimension(700, 10));
+		    js1.setPreferredSize(new Dimension(550, 10));
+		    
+		    this.dataTableShop.addMouseListener(new MouseAdapter (){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int i=dataTableShop.getSelectedRow();
+					if(i<0) {
+						return;
+					}
+					reloadCountTabel(i);
+					reloadYouhuiTabel(i);		
+				}
+		    	
+		    });
 		    JScrollPane js2=new JScrollPane(this.dataTableCount);
 		    js2.setPreferredSize(new Dimension(100, 10));
+		    JScrollPane js3=new JScrollPane(this.dataTableYouhui);
+		    js3.setPreferredSize(new Dimension(500, 10));
 		   this.getContentPane().add(js1, BorderLayout.WEST);
 		   this.getContentPane().add(js2, BorderLayout.CENTER);
+		   this.getContentPane().add(js3, BorderLayout.EAST);
 		 
 		    if(BeanUsers.currentLoginUser.isVip())
 		    {
@@ -254,6 +341,8 @@ public class FrmMain extends JFrame implements ActionListener {
 		    
 		    
 		    reloadPlanTable(edtKeyword.getText());
+		    reloadCountTabel(0);
+		    reloadYouhuiTabel(0);
 		    this.setVisible(true);
 
 		}else if(uskind==2)
@@ -369,7 +458,17 @@ public class FrmMain extends JFrame implements ActionListener {
 			} 
 			FrmBuy dlg=new FrmBuy(this,allshops.get(i).getShop_name()+"点餐",true,allshops.get(i),id);
 			dlg.setVisible(true);
+		}else if(e.getSource()==this.menuItem_own) {
+			FrmOwnerCount dlg=new FrmOwnerCount(this, "我的优惠券", true);
+			dlg.setVisible(true);
+		}else if(e.getSource()==this.menuItem_give) {
+			FrmGive dlg=new FrmGive(this, "我的集单活动", true);
+			dlg.setVisible(true);
+		}else if(e.getSource()==this.menuItem_order) {
+			FrmOrder dlg=new FrmOrder(this, "我的订单", true);
+			dlg.setVisible(true);
 		}
+			
 		
 		
 	}
