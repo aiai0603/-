@@ -5,6 +5,13 @@ import java.util.Date;
 public class BeanOrders {
 	
 	private int order_no;
+	public int getAddress_no() {
+		return address_no;
+	}
+	public void setAddress_no(int address_no) {
+		this.address_no = address_no;
+	}
+	private int address_no;
 	private int shop_no;
 	private int kind_no;
 	private int rider_no;
@@ -16,8 +23,15 @@ public class BeanOrders {
 	private Date arrive;
 	private int site;
 	private int user_no;
+	private String shop_name;
 	
 
+	public String getShop_name() {
+		return shop_name;
+	}
+	public void setShop_name(String string) {
+		this.shop_name = string;
+	}
 	public int getOrder_no() {
 		return order_no;
 	}
