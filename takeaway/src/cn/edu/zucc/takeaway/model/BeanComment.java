@@ -5,6 +5,13 @@ import java.util.Date;
 
 public class BeanComment {
 	private int good_no;
+	public String getUser_name() {
+		return user_name;
+	}
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
+	private String user_name;
 	private int user_no;
 	private String comment_word;
 	private Date comment_date;
