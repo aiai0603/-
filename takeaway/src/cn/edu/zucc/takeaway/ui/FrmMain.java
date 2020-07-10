@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -33,11 +34,14 @@ import javax.swing.table.DefaultTableModel;
 
 import cn.edu.zucc.takeaway.control.ExampleCountManager;
 import cn.edu.zucc.takeaway.control.ExampleOrderManager;
+import cn.edu.zucc.takeaway.control.ExampleRideManager;
 import cn.edu.zucc.takeaway.control.ExampleShopManager;
 import cn.edu.zucc.takeaway.control.ExampleUserManager;
 import cn.edu.zucc.takeaway.control.ExampleYouhuiManager;
 import cn.edu.zucc.takeaway.model.BeanAdmin;
 import cn.edu.zucc.takeaway.model.BeanCounts;
+import cn.edu.zucc.takeaway.model.BeanOrders;
+import cn.edu.zucc.takeaway.model.BeanRider;
 import cn.edu.zucc.takeaway.model.BeanShops;
 import cn.edu.zucc.takeaway.model.BeanUsers;
 import cn.edu.zucc.takeaway.model.BeanYouHui;
@@ -54,6 +58,22 @@ public class FrmMain extends JFrame implements ActionListener {
 	public static int uskind=0;
 	private static final long serialVersionUID = 1L;
 	//管理员系统
+	
+	private Object tblorder[]=BeanOrders.tableTitles;
+	private Object tblorderData[][];
+	DefaultTableModel taborderModel=new DefaultTableModel();
+	private JTable dataTableorder=new JTable(taborderModel);
+	
+	List<BeanOrders> allorder=new ArrayList<BeanOrders>();
+	
+	private Object tblrider[]={"骑手名","等级","配送状态"};
+	private Object tblriderData[][];
+	DefaultTableModel tabriderModel=new DefaultTableModel();
+	private JTable dataTablerider=new JTable(tabriderModel);
+	
+	List<BeanRider> allrider=new ArrayList<BeanRider>();
+	
+	
 	private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_user=new JMenu("用户管理");
     private JMenu menu_shop=new JMenu("商家管理");
@@ -69,10 +89,21 @@ public class FrmMain extends JFrame implements ActionListener {
     private JMenuItem  menuItem_Ridelist=new JMenuItem("统计数据");
     private JMenuItem  menuItem_modifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AddAdmin=new JMenuItem("新增管理员");
-  
+    private JPanel toolBar2 = new JPanel();
 	private FrmLogin dlgLogin=null;
 	private JPanel statusBar = new JPanel();
 	private JLabel label=new JLabel();
+	
+	
+	private JTextField edtKeyword2 = new JTextField(10);
+	private JButton btnSearch2 = new JButton("查询商家");
+	private JButton btnoffer = new JButton("分配订单");
+	private JButton btnarrive = new JButton("确认送达");
+	private JLabel space =new JLabel("                                                                                                             "
+			+ "                                                                                        ");
+	private JTextField edtKeyword3 = new JTextField(10);
+	private JButton btnSearch3 = new JButton("查询骑手");
+	
 	
 	
 	private JLabel count=new JLabel("                                                           集单送券活动");
@@ -89,10 +120,12 @@ public class FrmMain extends JFrame implements ActionListener {
 	private JMenuItem  menuItem_address=new JMenuItem("我的地址");
 	private JMenuItem  menuItem_order=new JMenuItem("我的订单");
 	private JPanel toolBar = new JPanel();
-	private JTextField edtKeyword = new JTextField(10);
+	 JTextField edtKeyword = new JTextField(10);
 	private JButton btnSearch = new JButton("查询商家");
-	private JPanel toolBar2 = new JPanel();
+	
 	private JButton btnGo = new JButton("进入商家");
+	
+	
 	
 	private Object tblShop[]=BeanShops.tableTitles2;
 	private Object tblShopData[][];
@@ -116,6 +149,32 @@ public class FrmMain extends JFrame implements ActionListener {
 	List<BeanCounts> allcount=null;
 	BeanShops curshop=null;
 	List<BeanYouHui> allyouhui;
+	
+	
+	 public void reloadriderTable(){
+		try {
+			ExampleRideManager ex=new ExampleRideManager();
+			allrider=ex.loadrider(this.edtKeyword3.getText());
+			tblriderData =new Object[allrider.size()][4];
+			for(int i=0;i<allrider.size();i++){
+				tblriderData[i][0]=allrider.get(i).getRider_name();
+				if(allrider.get(i).getRider_level()==1)
+				tblriderData[i][1]="新人";
+				else if(allrider.get(i).getRider_level()==2)
+				tblriderData[i][1]="正式员工";
+				else
+				tblriderData[i][1]="单王";	
+				
+				tblriderData[i][2]=allrider.get(i).isRide_site();
+			}
+			tabriderModel.setDataVector(tblriderData,tblrider);
+			this.dataTablerider.validate();
+			this.dataTablerider.repaint();
+		} catch (BaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 	private void reloadYouhuiTabel(int id){
@@ -143,7 +202,7 @@ public class FrmMain extends JFrame implements ActionListener {
 	} 
 	
 	
-	private void reloadPlanTable(String name){
+	void reloadPlanTable(String name){
 		try {
 			allshops=(new ExampleShopManager()).loadshop(name);
 		} catch (BaseException e) {
@@ -179,24 +238,40 @@ public class FrmMain extends JFrame implements ActionListener {
 		this.dataTableCount.repaint();
 	} 
 	
+	private void reloadOrderTabel(){
+		try {
+			allorder=(new ExampleOrderManager()).loadallorder(edtKeyword2.getText());
+		} catch (BaseException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		tblorderData =new Object[allorder.size()][BeanOrders.tableTitles.length];
+		for(int i=0;i<allorder.size();i++){
+			for(int j=0;j<BeanOrders.tableTitles.length;j++)
+				tblorderData[i][j]=allorder.get(i).getCell(j);
+		}
+		
+		taborderModel.setDataVector(tblorderData,tblorder);
+		this.dataTableorder.validate();
+		this.dataTableorder.repaint();
+	} 
+	
 	
 	public FrmMain(){
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
-		
+		try {
+			(new ExampleRideManager()).update();
+		} catch (DbException e2) {
+			// TODO 自动生成的 catch 块
+			e2.printStackTrace();
+		}
 		FrmLoading dlgLogin = new FrmLoading(this,"外卖助手",true);
 		dlgLogin.setVisible(true);
-		/*
-		try {
-			BeanUsers.currentLoginUser= (new ExampleUserManager()).login("1" ,"1");
-			uskind=1;
-		} catch (BaseException e1) {
-			// TODO 自动生成的 catch 块
-			e1.printStackTrace();
-		}
 		
-	*/
+		
 		if(uskind==1)
 		{
+			
 			toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 			toolBar.add(edtKeyword);
 			toolBar.add(btnSearch);
@@ -345,7 +420,8 @@ public class FrmMain extends JFrame implements ActionListener {
 		    reloadYouhuiTabel(0);
 		    this.setVisible(true);
 
-		}else if(uskind==2)
+		}
+		else if(uskind==2)
 		{
 			this.setTitle("管理系统");
 			this.menu_user.add(this.menuItem_Deleteuser); this.menuItem_Deleteuser.addActionListener(this);
@@ -361,9 +437,34 @@ public class FrmMain extends JFrame implements ActionListener {
 		    menubar.add(menu_shop);
 		    menubar.add(menu_ride);
 		    menubar.add(menu_more);
+		    
+		    toolBar2.setLayout(new FlowLayout(FlowLayout.LEFT));
+			toolBar2.add(edtKeyword2);
+			toolBar2.add(btnSearch2);
+			toolBar2.add(btnoffer);
+			toolBar2.add(btnarrive);
+			toolBar2.add(space);
+			toolBar2.add(edtKeyword3);
+			toolBar2.add(btnSearch3);
+			
+			this.btnSearch2.addActionListener(this);
+			this.btnSearch3.addActionListener(this);
+			this.btnoffer.addActionListener(this);
+			this.btnarrive.addActionListener(this);
+			this.getContentPane().add(toolBar2, BorderLayout.NORTH);
+		    
+		    JScrollPane js=new JScrollPane(this.dataTableorder);
+		    js.setPreferredSize(new Dimension(1000, 10));
+		    this.getContentPane().add(js, BorderLayout.WEST);
+		    JScrollPane js2=new JScrollPane(this.dataTablerider);
+		    js.setPreferredSize(new Dimension(1000, 10));
+		    this.getContentPane().add(js2, BorderLayout.CENTER);
+		    reloadOrderTabel();
+		    reloadriderTable();
+		    
 		    this.setJMenuBar(menubar);
-			   statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-			   label.setText("您好！管理员 "+BeanAdmin.currentLoginAdmin.getAdmin_name());
+			 statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+			 label.setText("您好！管理员 "+BeanAdmin.currentLoginAdmin.getAdmin_name());
 			 statusBar.add(label);
 			 this.getContentPane().add(statusBar,BorderLayout.SOUTH);
 			 
@@ -435,6 +536,7 @@ public class FrmMain extends JFrame implements ActionListener {
 		} else if(e.getSource()==this.menuItem_RideAdd) {
 			FrmRide dlg=new FrmRide(this,"骑手管理",true);
 			dlg.setVisible(true);
+			reloadriderTable();
 		} else if(e.getSource()==this.menuItem_address){
 			FrmAddress dlg=new FrmAddress(this,"地址管理",true);
 			dlg.setVisible(true);
@@ -458,6 +560,8 @@ public class FrmMain extends JFrame implements ActionListener {
 			} 
 			FrmBuy dlg=new FrmBuy(this,allshops.get(i).getShop_name()+"点餐",true,allshops.get(i),id);
 			dlg.setVisible(true);
+			cb.setSelectedItem("高星级优先");
+			
 		}else if(e.getSource()==this.menuItem_own) {
 			FrmOwnerCount dlg=new FrmOwnerCount(this, "我的优惠券", true);
 			dlg.setVisible(true);
@@ -467,7 +571,58 @@ public class FrmMain extends JFrame implements ActionListener {
 		}else if(e.getSource()==this.menuItem_order) {
 			FrmOrder dlg=new FrmOrder(this, "我的订单", true);
 			dlg.setVisible(true);
+		}else if(e.getSource()==this.btnSearch2) {
+			reloadOrderTabel();
+		}else if(e.getSource()==this.btnSearch3) {
+			reloadriderTable();
+		}else if(e.getSource()==this.btnoffer) {
+			int i=this.dataTableorder.getSelectedRow();
+			if(i<0) {
+				JOptionPane.showMessageDialog(null, "请选择订单", "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			int j=this.dataTablerider.getSelectedRow();
+			if(j<0) {
+				JOptionPane.showMessageDialog(null, "请选择骑手", "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			ExampleOrderManager ex=new ExampleOrderManager();
+			try {
+				ex.offerorder(allorder.get(i),allrider.get(j));
+			} catch (BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			reloadOrderTabel();
+			reloadriderTable();
+			JOptionPane.showMessageDialog(null, "分配成功", "成功",JOptionPane.INFORMATION_MESSAGE);
+		}else if(e.getSource()==this.btnarrive) {
+			int i=this.dataTableorder.getSelectedRow();
+			if(i<0) {
+				JOptionPane.showMessageDialog(null, "请选择订单", "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			ExampleOrderManager ex=new ExampleOrderManager();
+			try {
+				ex.arrive(allorder.get(i));
+			} catch (BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			reloadOrderTabel();
+			reloadriderTable();
+			JOptionPane.showMessageDialog(null, "成功送达，已经提示用户", "成功",JOptionPane.INFORMATION_MESSAGE);
 		}
+		else if(e.getSource()==this.menuItem_listuser)
+		{
+			FrmListUser dlg=new FrmListUser(this, "用户消费信息", true);
+			dlg.setVisible(true);
+		}else if(e.getSource()==this.menuItem_Ridelist)
+		{
+			FrmListRider dlg=new FrmListRider(this, "骑手入账", true);
+			dlg.setVisible(true);
+		}
+			
 			
 		
 		
