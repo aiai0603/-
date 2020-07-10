@@ -191,7 +191,6 @@ public class FrmSum extends JDialog implements ActionListener {
 			ex.upload(id,ad,by,fina,truesum,countsum,afterDate);
 			if(by!=null)
 			ex2.deleteowner(by);
-			
 			ex3.addgive(BeanUsers.currentLoginUser.getUser_no(), id);
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
