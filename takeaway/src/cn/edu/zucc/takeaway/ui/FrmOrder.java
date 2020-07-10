@@ -45,16 +45,15 @@ public class FrmOrder extends JDialog implements ActionListener {
 	private JTextField edtKeyword = new JTextField(10);
 	public static BeanUsers book;
 	private Button btnSearch = new Button("按店家查询");
-	private Button btnSure = new Button("确认收货");
+	private Button btndelete = new Button("取消该单");
 	private Button btnpj = new Button("评价该单");
-	private Button btnexit = new Button("取消订单");
 	
 	private Object tblTitle[]={"店家","总金额","下单时间","预计送达时间","状态"};
 	private Object tblData[][];
 	List<BeanOrders> you=null;
 	DefaultTableModel tablmod=new DefaultTableModel();
 	private JTable dataTable=new JTable(tablmod);
-	
+	private FrmMain f;
 	private void reloadTable(){
 		try {
 			SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -73,8 +72,10 @@ public class FrmOrder extends JDialog implements ActionListener {
 				else if(you.get(i).getSite()==2)
 					tblData[i][4]="配送中";
 				else if(you.get(i).getSite()==3)
-					tblData[i][4]="超时";
+					tblData[i][4]="超时未接单";
 				else if(you.get(i).getSite()==4)
+					tblData[i][4]="配送超时";
+				else if(you.get(i).getSite()==5)
 					tblData[i][4]="送达";
 			}
 			tablmod.setDataVector(tblData,tblTitle);
@@ -91,8 +92,8 @@ public class FrmOrder extends JDialog implements ActionListener {
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		toolBar.add(edtKeyword);
 		toolBar.add(btnSearch);
-		toolBar.add(btnSure);
-		toolBar.add(btnexit);
+		toolBar.add(btndelete);
+		this.btndelete.addActionListener(this);
 		toolBar.add(btnpj);
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
 		//提取现有数据
@@ -107,6 +108,8 @@ public class FrmOrder extends JDialog implements ActionListener {
 
 		this.validate();
 		this.btnSearch.addActionListener(this);
+		this.btnpj.addActionListener(this);
+		this.f=(FrmMain) f;
 		
 	}
 
@@ -115,6 +118,24 @@ public class FrmOrder extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		if(e.getSource()==this.btnSearch){
 			this.reloadTable();
+		}else if(e.getSource()==this.btndelete) {
+			int i=this.dataTable.getSelectedRow();
+			if(i<0) {
+				JOptionPane.showMessageDialog(null, "请选择订单", "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			ExampleOrderManager ex=new ExampleOrderManager();
+			try {
+				ex.deleteorder(you.get(i));
+			} catch (BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			this.reloadTable();
+			JOptionPane.showMessageDialog(null, "已经取消，已经联系店家", "成功",JOptionPane.INFORMATION_MESSAGE);
+			f.reloadPlanTable(f.edtKeyword.getText());
+		}else if(e.getSource()==this.btnpj) {
+			
 		}
 		
 	}
