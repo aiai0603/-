@@ -1,8 +1,10 @@
 package cn.edu.zucc.takeaway.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BeanOrders {
+	public static final  String[] tableTitles= {"用户名","商家名","配送地址","价格","需要送达时间","状态"};
 	
 	private int order_no;
 	public int getAddress_no() {
@@ -24,8 +26,21 @@ public class BeanOrders {
 	private int site;
 	private int user_no;
 	private String shop_name;
-	
+	private String user_name;
+	private String address_name;
 
+	public String getAddress_name() {
+		return address_name;
+	}
+	public void setAddress_name(String address_name) {
+		this.address_name = address_name;
+	}
+	public String getUser_name() {
+		return user_name;
+	}
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
 	public String getShop_name() {
 		return shop_name;
 	}
@@ -105,6 +120,28 @@ public class BeanOrders {
 		this.user_no = user_no;
 	}
 	
+	public String getCell(int col){
+		SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if(col==0) return this.getUser_name();
+		else if(col==1) return this.getShop_name();
+		else if(col==2) return this.getAddress_name();
+		else if(col==4) return  f.format(this.getArrive());
+		else if(col==3) return  Double.toString(this.getTrue_money());
+		else if(col==5) {
+			
+			if(this.getSite()==1)
+				return "等待接单";
+			else if(this.getSite()==2)
+				return "正在配送";
+			else if(this.getSite()==3)
+				return "超时未接单";
+			else if(this.getSite()==4)
+				return "配送超时";
+			else if(this.getSite()==0)
+				return "用户取消";
+		}
+		return "";
+	}
 	
 	
 	
