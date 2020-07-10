@@ -73,6 +73,9 @@ public class FrmAddRide extends JDialog implements ActionListener {
 			}
 			JOptionPane.showMessageDialog(null, "添加成功","成功",JOptionPane.INFORMATION_MESSAGE);
 			this.setVisible(false);
+			
+			
+			
 		}
 			
 		
