@@ -60,7 +60,7 @@ public class FrmBuy extends JFrame implements ActionListener {
 	private JButton btnChange = new JButton("修改数量");
 	private JButton btnCount = new JButton("结算订单");
 	private JButton btnexit = new JButton("退出商家");
-	private JButton btnSee = new JButton("查看评论");
+	private JButton btnSee = new JButton("商品评论");
 	private JButton btnsale = new JButton("查看本店优惠");
 	
 	private Object tblbuyTitle[]=BeanGoodMore.tableTitles;
@@ -147,7 +147,7 @@ public class FrmBuy extends JFrame implements ActionListener {
 		this.dataTableGood.validate();
 		this.dataTableGood.repaint();
 	} 
-	
+	private FrmMain f;
 	
 	public FrmBuy(FrmMain frmMain, String string, boolean b, BeanShops beanShops, int id){
 		super(string);
@@ -197,6 +197,7 @@ public class FrmBuy extends JFrame implements ActionListener {
 	   this.btnCount.addActionListener(this);
 	   this.btnexit.addActionListener(this);
 	   this.btnsale.addActionListener(this);
+	   this.btnSee.addActionListener(this);
 	  
 	    this.dataTableKind.addMouseListener(new MouseAdapter (){
 
@@ -224,11 +225,15 @@ public class FrmBuy extends JFrame implements ActionListener {
 						return;
 					
 				}
+				
+				frmMain.reloadPlanTable(frmMain.edtKeyword.getText());
 			}
 		});
 	    //状态栏
 	    this.setExtendedState(Frame.MAXIMIZED_BOTH);
 	    this.setVisible(true);
+	    
+	    f=frmMain;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -280,6 +285,7 @@ public class FrmBuy extends JFrame implements ActionListener {
 				dlg.setVisible(true);
 				if(ok==1)
 				{
+					f.reloadPlanTable(f.edtKeyword.getText());
 					this.setVisible(false);
 				}
 			} catch (BaseException e1) {
@@ -292,11 +298,21 @@ public class FrmBuy extends JFrame implements ActionListener {
 			FrmExit dlg=new FrmExit(this, "提示", true,orderid); 
 			dlg.setVisible(true);
 			if(exit==1) {
+				f.reloadPlanTable(f.edtKeyword.getText());
 				this.setVisible(false);
 			}
 		
 		}else if(e.getSource()==this.btnsale){
 			FrmShowSale dlg=new FrmShowSale(this, "商家优惠", true, curshop);
+			dlg.setVisible(true);
+			
+		}else if(e.getSource()==this.btnSee){
+			int j=FrmBuy.this.dataTableGood.getSelectedRow();
+			if(j<0) {
+				JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			FrmShowCommit dlg=new FrmShowCommit(this, "商品评价", true, good.get(j),curshop);
 			dlg.setVisible(true);
 			
 		}
