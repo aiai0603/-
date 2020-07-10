@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -107,7 +108,6 @@ public class ExampleRideManager  {
 			pst.setString(1,name);
 			pst.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));
 			pst.execute();
-			
 			pst.close();
 		
 		} catch (SQLException e) {
@@ -164,5 +164,51 @@ public class ExampleRideManager  {
 				}
 		}
 	}
+
+
+	@SuppressWarnings("deprecation")
+	public void update() throws DbException {
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from rider";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			java.sql.ResultSet rs=pst.executeQuery();
+			 Calendar cal = Calendar.getInstance();
+			   int month = cal.get(Calendar.MONTH) + 1;
+			while(rs.next())
+			{
+				
+				if((rs.getTimestamp(3).getMonth()+3)<month&&rs.getInt(4)==1)
+				{
+					sql="update rider set rider_level=2 where rider_no=?";
+					pst=conn.prepareStatement(sql);
+					pst.setInt(1,rs.getInt(1));
+					pst.execute();
+				}
+			}
+			
+			
+			rs.close();
+			pst.close();
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
+	}
+
+
+	
 	
 }
