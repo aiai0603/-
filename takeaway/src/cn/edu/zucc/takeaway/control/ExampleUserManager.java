@@ -487,4 +487,70 @@ public class ExampleUserManager  {
 		}
 	}
 
+	public int searchUsersum(int i) throws DbException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		try {
+			
+			conn=DBUtil.getConnection();
+			String sql="select count(*) from orders,users where users.user_no = ? and users.user_no=orders.user_no";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,i);
+			java.sql.ResultSet rs=pst.executeQuery();
+			
+			if(rs.next())
+			{
+				return rs.getInt(1);
+			}
+			else {
+				return 0;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
+		
+	}
+
+	public double searchmoney(int i) throws DbException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select * from orders,users where users.user_no = ? and users.user_no=orders.user_no";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1,i);
+			java.sql.ResultSet rs=pst.executeQuery();
+			double sum=0;
+			while(rs.next())
+			{
+				sum+= rs.getDouble(8);
+			}
+			return sum;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
+
 }
