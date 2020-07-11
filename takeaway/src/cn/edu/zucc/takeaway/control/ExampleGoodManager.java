@@ -26,7 +26,7 @@ public class ExampleGoodManager {
 		try {
 			
 			conn=DBUtil.getConnection();
-			String sql="select * from goods where kind_no = ?";
+			String sql="select * from goods where kind_no = ? and isdelete = 0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,beankind.getKind_no());
 			java.sql.ResultSet rs=pst.executeQuery();
@@ -82,7 +82,7 @@ public class ExampleGoodManager {
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(rs.next())throw new BusinessException("商品已经存在！");
 			
-			sql="insert into goods(kind_no,good_name,good_price,good_sale) values(?,?,?,?)";
+			sql="insert into goods(kind_no,good_name,good_price,good_sale,isdelete) values(?,?,?,?,0)";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1,kind.getKind_no());
 			pst.setString(2, name);
@@ -117,7 +117,7 @@ public class ExampleGoodManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="delete from goods where good_no=?";
+			String sql="update goods set isdelete=1 where good_no=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1, beanGoods.getGood_no());
 			pst.execute();
@@ -156,10 +156,11 @@ public class ExampleGoodManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from goods where good_name=? and kind_no = ?";
+			String sql="select * from goods where good_name=? and kind_no = ? and good_no!=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,name);
 			pst.setInt(2,beanGoods.getKind_no());
+			pst.setInt(3, beanGoods.getGood_no());
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(rs.next())throw new BusinessException("商品已经存在！");
 			
@@ -187,6 +188,94 @@ public class ExampleGoodManager {
 					e.printStackTrace();
 				}
 		}
+		
+	}
+
+	public BeanGoods tjgoods( ) throws DbException {
+		// TODO 自动生成的方法存根
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			
+			String sql="select goods.good_no from good_more,goods where goods.good_no=good_more.good_no and goods.isdelete=0 having count(goods.good_no)>=all(select count(goods.good_no) from good_more,goods where good_more.good_no=goods.good_no "
+					+ "and  goods.isdelete=0)";
+		
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			java.sql.ResultSet rs=pst.executeQuery();
+			int goodno=0;
+			
+			rs.next();
+			if(rs.getInt(1)!=0)
+			{
+				goodno=rs.getInt(1);
+			}
+			else {
+				sql="select good_no from goods where isdelete=0";
+				pst=conn.prepareStatement(sql);
+				java.sql.ResultSet rs2=pst.executeQuery();
+				 rs2.next();
+				goodno=rs2.getInt(1);
+				rs2.close();
+			}
+		
+			sql="select * from goods where good_no=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1, goodno);
+			rs=pst.executeQuery();
+			rs.next();
+			BeanGoods u=new BeanGoods();
+			u.setGood_no(rs.getInt(1));
+			u.setGood_name(rs.getString(3));
+			u.setKind_no(rs.getInt(2));
+			u.setGood_price(rs.getDouble(4));
+			u.setGood_sale(rs.getDouble(5));
+			
+			
+			rs.close();
+			pst.close();
+			return u;
+			
+		
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
+
+	public String getshopname(int id) throws DbException {
+		java.sql.Connection conn=null;
+		try {
+			conn=DBUtil.getConnection();
+			String sql="select shops.shop_name from shops,kinds,goods where shops.shop_no=kinds.shop_no and kinds.kind_no=goods.kind_no and goods.good_no=?";
+			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+			pst.setInt(1, id);
+			java.sql.ResultSet rs=pst.executeQuery();
+			rs.next();
+			return rs.getString(1);
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally{
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+			
 		
 	}
 
