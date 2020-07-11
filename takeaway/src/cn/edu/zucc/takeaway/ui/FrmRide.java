@@ -44,7 +44,7 @@ public class FrmRide extends JDialog implements ActionListener {
 	private JPanel toolBar = new JPanel();
 	private Button btnAdd = new Button("添加");
 	private Button btnModify = new Button("修改");
-	private Button btnDelete = new Button("删除");
+	
 	private JTextField edtKeyword = new JTextField(10);
 	private Button btnSearch = new Button("查询");
 	private Object tblTitle[]={"骑手名","创建时间","等级","配送状态"};
@@ -86,7 +86,7 @@ public class FrmRide extends JDialog implements ActionListener {
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		toolBar.add(btnAdd);
 		toolBar.add(btnModify);
-		toolBar.add(btnDelete);
+		
 		toolBar.add(edtKeyword);
 		toolBar.add(btnSearch);
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
@@ -103,7 +103,7 @@ public class FrmRide extends JDialog implements ActionListener {
 		this.validate();
 		this.btnAdd.addActionListener(this);
 		this.btnModify.addActionListener(this);
-		this.btnDelete.addActionListener(this);
+	
 		this.btnSearch.addActionListener(this);
 		
 	}
@@ -129,28 +129,6 @@ public class FrmRide extends JDialog implements ActionListener {
 			
 		}
 		
-		else if(e.getSource()==this.btnDelete){
-			int i=this.dataTable.getSelectedRow();
-			if(i<0) {
-				JOptionPane.showMessageDialog(null,  "请选择用户","提示",JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			book=this.ride.get(i);
-			ExampleRideManager ex=new ExampleRideManager();
-			try {
-				ex.deleteride(book);
-			}  catch (BaseException e1) {
-				// TODO 自动生成的 catch 块
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"提示",JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			JOptionPane.showMessageDialog(null, "修改成功,","成功",JOptionPane.INFORMATION_MESSAGE);
-			this.reloadTable();
-			
-		}
-		else if(e.getSource()==this.btnSearch){
-			this.reloadTable();
-		}
 		
 	}
 }
