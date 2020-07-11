@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 
 import cn.edu.zucc.takeaway.control.*;
 import cn.edu.zucc.takeaway.model.BeanAddresser;
+import cn.edu.zucc.takeaway.model.BeanOrders;
 import cn.edu.zucc.takeaway.model.BeanOwnerCount;
 import cn.edu.zucc.takeaway.util.BaseException;
 
@@ -36,9 +37,9 @@ public class Frmpj extends JDialog implements ActionListener {
 	private JLabel labelUser = new JLabel("评价等级：");
 	String pjitem[]= {"好评","差评"};
 	JComboBox<String> cb=new JComboBox<String>(pjitem);
-	
-	public Frmpj(FrmShop frmShop, String s, boolean b) {
-		super(frmShop, s, b);
+	private BeanOrders bean;
+	public Frmpj(FrmOrder frmOrder, String s, boolean b,BeanOrders bu) {
+		super(frmOrder, s, b);
 	
 		toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		toolBar.add(this.btnOk);
@@ -47,13 +48,14 @@ public class Frmpj extends JDialog implements ActionListener {
 		workPane.add(labelUser);
 		workPane.add(cb);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
-		this.setSize(290, 160);
+		this.setSize(290, 100);
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
 				(int) (height - this.getHeight()) / 2);
 		this.btnCancel.addActionListener(this);
 		this.btnOk.addActionListener(this);
+		bean=bu;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -62,17 +64,17 @@ public class Frmpj extends JDialog implements ActionListener {
 		else if(e.getSource()==this.btnOk){
 			int i=this.cb.getSelectedIndex();
 			ExampleRideIncomeManager ex=new ExampleRideIncomeManager();
-			/*
+			
 			try {
-				ex.updatepj(,i);
+				ex.updatepj(bean,cb.getSelectedIndex());
 			} catch (BaseException e1) {
 				// TODO 自动生成的 catch 块
 				
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
 					return;
 			}
-			*/
-			JOptionPane.showMessageDialog(null, "添加成功","成功",JOptionPane.INFORMATION_MESSAGE);
+			
+			JOptionPane.showMessageDialog(null, "评价成功","成功",JOptionPane.INFORMATION_MESSAGE);
 			this.setVisible(false);
 		}
 			
