@@ -462,30 +462,7 @@ public class ExampleUserManager  {
 		
 	}
 
-	public void deleteUser(BeanUsers book) throws DbException {
-		// TODO 自动生成的方法存根
-		java.sql.Connection conn=null;
-		try {
-			conn=DBUtil.getConnection();
-			String sql="delete from users where user_no=?";
-			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			pst.setInt(1, book.getUser_no());
-			pst.execute();
-			pst.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DbException(e);
-		}
-		finally{
-			if(conn!=null)
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-	}
+
 
 	public int searchUsersum(int i) throws DbException {
 		// TODO 自动生成的方法存根
