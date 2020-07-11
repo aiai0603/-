@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import cn.edu.zucc.takeaway.model.BeanOrders;
 import cn.edu.zucc.takeaway.model.BeanRider;
 import cn.edu.zucc.takeaway.model.BeanRiderIncome;
 import cn.edu.zucc.takeaway.model.BeanShops;
@@ -119,6 +120,8 @@ public List<BeanRiderIncome> loadriderincome(BeanRider br) throws DbException{
 			}
 			rs.close();
 			pst.close();
+			if(count<0)
+				count=0;
 			return count;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -135,30 +138,23 @@ public List<BeanRiderIncome> loadriderincome(BeanRider br) throws DbException{
 		}
 	}
 
-	/*
-	
-	public void addride(String name) throws BusinessException, DbException {
+	public void updatepj(BeanOrders bean, int i) throws DbException {
 		// TODO 自动生成的方法存根
-		if(name==null || "".equals(name) || name.length()>10){
-			throw new BusinessException("骑手必须是1-10个字");
-		}
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from rider where rider_name=?";
+			String sql;
+			if(i==0)
+			{
+				sql="update rider_income set rider_comment=1,income=income+0.5 where order_no=?";
+			}
+			else {
+				sql="update rider_income set rider_comment=2,income=income-20 where order_no=?";
+			}
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			pst.setString(1,name);
-			java.sql.ResultSet rs=pst.executeQuery();
-			if(rs.next())throw new BusinessException("骑手已经存在！");
-			
-			sql="insert into rider(rider_name,rider_start,rider_level,rider_site) values(?,?,1,0)";
-			pst=conn.prepareStatement(sql);
-			pst.setString(1,name);
-			pst.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));
+			pst.setInt(1,bean.getOrder_no());
 			pst.execute();
-			
 			pst.close();
-		
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -172,33 +168,30 @@ public List<BeanRiderIncome> loadriderincome(BeanRider br) throws DbException{
 					e.printStackTrace();
 				}
 		}
-		
 	}
 
-
-	public void modifyrider(int id, String name) throws BusinessException, DbException {
+	public void canpj(BeanOrders bean) throws BusinessException, DbException {
 		// TODO 自动生成的方法存根
 		java.sql.Connection conn=null;
-		if(name==null || "".equals(name) || name.length()>10){
-			throw new BusinessException("骑手名必须是1-10个字");
-		}
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from rider where rider_name=?";
+			String sql;
+			sql="select rider_comment from rider_income where order_no=? ";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			pst.setString(1,name);
+			pst.setInt(1,bean.getOrder_no());
 			java.sql.ResultSet rs=pst.executeQuery();
-			if(rs.next())throw new BusinessException("骑手已经存在！");
-			
-			sql="update rider set rider_name=? where rider_no=?";
-			pst=conn.prepareStatement(sql);
-			pst.setString(1,name);
-			pst.setLong(2,id);
-			pst.execute();
+			if(!rs.next()) {
+				throw new BusinessException("订单还未送达！");
+			}
+			else{
+				if(rs.getInt(1)!=0) {
+					throw new BusinessException("您已经评价过了！");
+				}
+				
+			}
 			
 			rs.close();
 			pst.close();
-		
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -213,6 +206,7 @@ public List<BeanRiderIncome> loadriderincome(BeanRider br) throws DbException{
 				}
 		}
 	}
-	*/
+
+	
 	
 }
