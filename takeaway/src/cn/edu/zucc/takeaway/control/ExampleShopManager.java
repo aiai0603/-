@@ -32,7 +32,7 @@ public class ExampleShopManager  {
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(rs.next())throw new BusinessException("商家已经存在！");
 			
-			sql="insert into shops(shop_name,level,avg_consume,sum_sale) values(?,5,0,0)";
+			sql="insert into shops(shop_name,level,avg_consume,sum_sale,isdelete) values(?,5,0,0,0)";
 			pst=conn.prepareStatement(sql);
 			pst.setString(1,name);
 			pst.execute();
@@ -60,7 +60,7 @@ public class ExampleShopManager  {
 		try {
 			
 			conn=DBUtil.getConnection();
-			String sql="select * from shops where shop_name like ? order by level desc";
+			String sql="select * from shops where shop_name like ? and isdelete=0 order by level desc";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			String str="%"+name+"%";
 			pst.setString(1,str);
@@ -101,7 +101,7 @@ public class ExampleShopManager  {
 		try {
 			
 			conn=DBUtil.getConnection();
-			String sql="select * from shops where shop_name like ? order by avg_consume desc";
+			String sql="select * from shops where shop_name like ? and isdelete=0 order by avg_consume desc";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			String str="%"+name+"%";
 			pst.setString(1,str);
@@ -142,7 +142,7 @@ public List<BeanShops> loadshopbyavg1(String name) throws DbException{
 		try {
 			
 			conn=DBUtil.getConnection();
-			String sql="select * from shops where shop_name like ? order by avg_consume asc";
+			String sql="select * from shops where shop_name like ? and isdelete=0 order by avg_consume asc";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			String str="%"+name+"%";
 			pst.setString(1,str);
@@ -183,7 +183,7 @@ public List<BeanShops> loadshopbysum(String name) throws DbException{
 	try {
 		
 		conn=DBUtil.getConnection();
-		String sql="select * from shops where shop_name like ? order by sum_sale desc";
+		String sql="select * from shops where shop_name like ? and isdelete=0 order by sum_sale desc";
 		java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 		String str="%"+name+"%";
 		pst.setString(1,str);
@@ -222,7 +222,7 @@ public List<BeanShops> loadshopbysum(String name) throws DbException{
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select count(*) from kinds where shop_no=?";
+			String sql="select count(*) from kinds where shop_no=? and isdelete=0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,curshop.getShop_no());
 			java.sql.ResultSet rs=pst.executeQuery();
@@ -231,7 +231,7 @@ public List<BeanShops> loadshopbysum(String name) throws DbException{
 			{
 				throw new BusinessException("该商家仍有设置商品类别，无法删除！");
 			}
-			sql="delete from shops where shop_no=?";
+			sql="update shops set isdelete=1 where shop_no=?";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, curshop.getShop_no());
 			pst.execute();
