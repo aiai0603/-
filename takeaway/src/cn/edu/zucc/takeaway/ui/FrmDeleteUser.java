@@ -41,7 +41,6 @@ public class FrmDeleteUser extends JDialog implements ActionListener {
 	public static BeanUsers book;
 	private JPanel toolBar = new JPanel();
 	private Button btnModify = new Button("修改");
-	private Button btnDelete = new Button("删除");
 	private JTextField edtKeyword = new JTextField(10);
 	private Button btnSearch = new Button("查询");
 	private Object tblTitle[]={"用户名","手机","城市","邮箱","VIP状态"};
@@ -75,10 +74,10 @@ public class FrmDeleteUser extends JDialog implements ActionListener {
 	public FrmDeleteUser (Frame f, String s, boolean b) {
 		super(f, s, b);
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-		toolBar.add(btnModify);
-		toolBar.add(btnDelete);
+		
 		toolBar.add(edtKeyword);
 		toolBar.add(btnSearch);
+		toolBar.add(btnModify);
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
 		//提取现有数据
 		this.reloadTable();
@@ -94,7 +93,7 @@ public class FrmDeleteUser extends JDialog implements ActionListener {
 
 		
 		this.btnModify.addActionListener(this);
-		this.btnDelete.addActionListener(this);
+	
 		this.btnSearch.addActionListener(this);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -118,26 +117,7 @@ public class FrmDeleteUser extends JDialog implements ActionListener {
 			this.reloadTable();
 			}
 		
-		else if(e.getSource()==this.btnDelete){
-			int i=this.dataTable.getSelectedRow();
-			if(i<0) {
-				JOptionPane.showMessageDialog(null,  "请选择用户","提示",JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			book=this.user.get(i);
-			ExampleUserManager ex=new ExampleUserManager();
-			try {
-				ex.deleteUser(book);
-			
-			} catch (DbException e1) {
-				// TODO 自动生成的 catch 块
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
-			return;
-			}
-			JOptionPane.showMessageDialog(null, "修改成功,","成功",JOptionPane.INFORMATION_MESSAGE);
-			this.reloadTable();
-			
-		}
+		
 		else if(e.getSource()==this.btnSearch){
 			this.reloadTable();
 		}
