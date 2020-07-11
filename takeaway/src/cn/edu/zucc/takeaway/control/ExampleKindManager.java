@@ -25,7 +25,7 @@ public class ExampleKindManager {
 		try {
 			
 			conn=DBUtil.getConnection();
-			String sql="select * from kinds where shop_no = ?";
+			String sql="select * from kinds where shop_no = ? and isdelete =0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,beanshop.getShop_no());
 			java.sql.ResultSet rs=pst.executeQuery();
@@ -72,7 +72,7 @@ public void addkind(BeanShops bean ,String name) throws DbException, BusinessExc
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(rs.next())throw new BusinessException("类别已经存在！");
 			
-			sql="insert into kinds(shop_no,kind_name,kind_sum) values(?,?,0)";
+			sql="insert into kinds(shop_no,kind_name,kind_sum,isdelete) values(?,?,0,0)";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, bean.getShop_no());
 			pst.setString(2,name);
@@ -100,7 +100,7 @@ public void addkind(BeanShops bean ,String name) throws DbException, BusinessExc
     	java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select count(*) from goods where kind_no=?";
+			String sql="select count(*) from goods where kind_no=? and isdelete=0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,curkind.getKind_no());
 			java.sql.ResultSet rs=pst.executeQuery();
@@ -109,7 +109,7 @@ public void addkind(BeanShops bean ,String name) throws DbException, BusinessExc
 			{
 				throw new BusinessException("该类别仍有设置商品，无法删除！");
 			}
-			sql="delete from kinds where kind_no=?";
+			sql="update kinds set isdelete=1 where kind_no=?";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, curkind.getKind_no());
 			pst.execute();
@@ -174,7 +174,7 @@ public void addkind(BeanShops bean ,String name) throws DbException, BusinessExc
 		try {
 			
 			conn=DBUtil.getConnection();
-			String sql="select * from kinds where shop_no = ? and kind_sum!=0";
+			String sql="select * from kinds where shop_no = ? and kind_sum!=0 and isdelete=0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,beanshop.getShop_no());
 			java.sql.ResultSet rs=pst.executeQuery();
