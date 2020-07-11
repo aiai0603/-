@@ -28,7 +28,7 @@ public class ExampleYouhuiManager {
 		List<BeanYouHui> result = new ArrayList<BeanYouHui>();
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from youhui where shop_no = ?";
+			String sql="select * from youhui where shop_no = ? and isdelete =0 ";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,beanshop.getShop_no());
 			java.sql.ResultSet rs=pst.executeQuery();
@@ -69,7 +69,7 @@ public List<BeanYouHui> loadyouhui2(BeanShops beanshop) throws DbException{
 		List<BeanYouHui> result = new ArrayList<BeanYouHui>();
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from youhui where shop_no = ?";
+			String sql="select * from youhui where shop_no = ? and isdelete=0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,beanshop.getShop_no());
 			java.sql.ResultSet rs=pst.executeQuery();
@@ -110,11 +110,11 @@ public List<BeanYouHui> loadyouhui2(BeanShops beanshop) throws DbException{
 
 	public void addyouhui(BeanShops shop, int p1, double p2, String string, String string2, int i) throws BusinessException, ParseException, DbException {
 		// TODO 自动生成的方法存根
-		if(p1>=10)throw new BusinessException("需求订单不得高于10单");
+		if(p1>=10||p1<1)throw new BusinessException("需求订单不得高于10单,低于1单");
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select count(*) from youhui where shop_no=?";
+			String sql="select count(*) from youhui where shop_no=? and isdelete=0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setLong(1,shop.getShop_no());
 			java.sql.ResultSet rs=pst.executeQuery();
@@ -125,7 +125,7 @@ public List<BeanYouHui> loadyouhui2(BeanShops beanshop) throws DbException{
 			java.sql.Timestamp d1=new java.sql.Timestamp(f.parse(string).getTime());
 			java.sql.Timestamp d2=new java.sql.Timestamp(f.parse(string2).getTime());
 			if(f.parse(string2).getTime()<f.parse(string).getTime())throw new BusinessException("结束日期不得早于开始日期");
-			sql="insert into youhui(shop_no,youhui_sale,request,startday,endday,together) values(?,?,?,?,?,?)";
+			sql="insert into youhui(shop_no,youhui_sale,request,startday,endday,together,isdelete) values(?,?,?,?,?,?,0)";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, shop.getShop_no());
 			pst.setDouble(2,p2);
@@ -160,7 +160,7 @@ public List<BeanYouHui> loadyouhui2(BeanShops beanshop) throws DbException{
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="delete from youhui where youhui_no=?";
+			String sql="update youhui set isdelete=1 where youhui_no=? ";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1, c.getYouhui_no());
 			pst.execute();
@@ -182,7 +182,7 @@ public List<BeanYouHui> loadyouhui2(BeanShops beanshop) throws DbException{
 
 	public void modifyyouhui(BeanYouHui by, int p1, double p2, String string, String string2,int i) throws BusinessException, ParseException, DbException {
 		// TODO 自动生成的方法存根
-		if(p1>=10)throw new BusinessException("需求订单不得高于10单");
+		if(p1>=10||p1<1)throw new BusinessException("需求订单不得高于10单,低于1单");
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
