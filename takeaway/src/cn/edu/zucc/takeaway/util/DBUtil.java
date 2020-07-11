@@ -3,7 +3,7 @@ package cn.edu.zucc.takeaway.util;
 import java.sql.Connection;
 
 public class DBUtil {
-	private static final String jdbcUrl="jdbc:mysql://localhost:3306/takeaway?useSSL=false";
+	private static final String jdbcUrl="jdbc:mysql://localhost:3306/takeaway?useSSL=false&&characterEncoding=utf8";
 	private static final String dbUser="root";
 	private static final String dbPwd="123456";
 	static{
