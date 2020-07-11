@@ -26,7 +26,7 @@ public class ExampleCountManager {
 		try {
 			
 			conn=DBUtil.getConnection();
-			String sql="select * from counts where shop_no = ? order by ac_money asc";
+			String sql="select * from counts where shop_no = ? and isdelete=0 order by ac_money asc ";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,beanshop.getShop_no());
 			java.sql.ResultSet rs=pst.executeQuery();
@@ -65,14 +65,14 @@ public class ExampleCountManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from counts where ac_money=? and shop_no=?";
+			String sql="select * from counts where ac_money=? and shop_no=? and isdelete=0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setDouble(1, p1);;
 			pst.setLong(2, bs.getShop_no());
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(rs.next())throw new BusinessException("该金额已经存在满减！");
 			
-			sql="select count_sale from counts where shop_no=? and ac_money<? order by ac_money desc limit 1";
+			sql="select count_sale from counts where shop_no=? and isdelete=0 and ac_money<? order by ac_money desc limit 1";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, bs.getShop_no());
 			pst.setDouble(2, p1);
@@ -84,7 +84,7 @@ public class ExampleCountManager {
 			}
 		
 			
-			sql="select count_sale from counts where shop_no=? and ac_money>? order by ac_money asc limit 1";
+			sql="select count_sale from counts where shop_no=? and isdelete=0 and ac_money>? order by ac_money asc limit 1";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, bs.getShop_no());
 			pst.setDouble(2, p1);
@@ -96,7 +96,7 @@ public class ExampleCountManager {
 		
 			
 			
-			sql="insert into counts(shop_no,ac_money,count_sale) values(?,?,?)";
+			sql="insert into counts(shop_no,ac_money,count_sale,isdelete) values(?,?,?,0)";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, bs.getShop_no());
 			pst.setDouble(2, p1);
@@ -127,7 +127,7 @@ public class ExampleCountManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="delete from counts where count_no=?";
+			String sql="update counts set isdelete =1 where count_no=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1, beanCounts.getCount_no());
 			pst.execute();
@@ -154,7 +154,7 @@ public class ExampleCountManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from counts where ac_money=? and shop_no=? and count_no !=?";
+			String sql="select * from counts where ac_money=?  and isdelete=0 and shop_no=? and count_no !=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setDouble(1, p1);
 			pst.setInt(3, count.getCount_no());
@@ -162,7 +162,7 @@ public class ExampleCountManager {
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(rs.next())throw new BusinessException("该金额已经存在满减！");
 			
-			sql="select count_sale from counts where shop_no=? and ac_money<? and count_no !=? order by ac_money desc limit 1";
+			sql="select count_sale from counts where shop_no=? and isdelete=0 and ac_money<? and count_no !=? order by ac_money desc limit 1";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, count.getCount_no());
 			pst.setDouble(2, p1);
@@ -175,7 +175,7 @@ public class ExampleCountManager {
 			}
 		
 			
-			sql="select count_sale from counts where shop_no=? and ac_money>? and count_no !=? order by ac_money asc limit 1";
+			sql="select count_sale from counts where shop_no=? and isdelete=0 and ac_money>? and count_no !=? order by ac_money asc limit 1";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1,count.getShop_no());
 			pst.setDouble(2, p1);
@@ -224,7 +224,7 @@ public class ExampleCountManager {
 			rs.next();
 			int shop=rs.getInt(1);
 			
-			sql="select * from counts where shop_no=? and ac_money<=? order by ac_money desc limit 1";
+			sql="select * from counts where shop_no=? and isdelete=0 and ac_money<=? order by ac_money desc limit 1";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1,shop);
 			pst.setDouble(2, d);
