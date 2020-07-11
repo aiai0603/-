@@ -272,6 +272,7 @@ public class FrmMain extends JFrame implements ActionListener {
 		if(uskind==1)
 		{
 			
+			
 			toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 			toolBar.add(edtKeyword);
 			toolBar.add(btnSearch);
@@ -418,7 +419,10 @@ public class FrmMain extends JFrame implements ActionListener {
 		    reloadPlanTable(edtKeyword.getText());
 		    reloadCountTabel(0);
 		    reloadYouhuiTabel(0);
+		  
 		    this.setVisible(true);
+		    FrmTJ dlg=new FrmTJ(this,"ΩÒ»’Õ∆ºˆ",true);
+			dlg.setVisible(true);
 
 		}
 		else if(uskind==2)
