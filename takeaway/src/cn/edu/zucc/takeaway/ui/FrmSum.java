@@ -169,6 +169,7 @@ public class FrmSum extends JDialog implements ActionListener {
 				by=null;
 				ad=null;
 				resum();
+			
 			}
 		});
 	}
@@ -196,6 +197,8 @@ public class FrmSum extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 				return;
 			} 
+			by=null;
+			ad=null;
 			JOptionPane.showMessageDialog(null, "下单成功！骑手在来的路上！", "成功",JOptionPane.INFORMATION_MESSAGE);
 			this.setVisible(false);
 			FrmBuy.ok=1;
@@ -206,6 +209,7 @@ public class FrmSum extends JDialog implements ActionListener {
 			if(by!=null)
 				this.youhui.setLabel("优惠券已减"+by.getCount_money()+"元");
 			resum();
+			
 		}else if(e.getSource()==this.address){
 			FrmAddress dlg=new FrmAddress(this,"选择收货地址",true);
 			dlg.setVisible(true);
