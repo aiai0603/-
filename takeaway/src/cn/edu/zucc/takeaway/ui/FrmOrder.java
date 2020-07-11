@@ -135,7 +135,21 @@ public class FrmOrder extends JDialog implements ActionListener {
 			JOptionPane.showMessageDialog(null, "已经取消，已经联系店家", "成功",JOptionPane.INFORMATION_MESSAGE);
 			f.reloadPlanTable(f.edtKeyword.getText());
 		}else if(e.getSource()==this.btnpj) {
-			
+			int i=this.dataTable.getSelectedRow();
+			if(i<0) {
+				JOptionPane.showMessageDialog(null, "请选择订单", "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			ExampleRideIncomeManager ex=new ExampleRideIncomeManager();
+			try {
+				ex.canpj(you.get(i));
+			} catch (BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			Frmpj dlg=new Frmpj(this, "评价订单", true, you.get(i));
+			dlg.setVisible(true);
+			this.reloadTable();
 		}
 		
 	}
