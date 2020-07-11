@@ -33,7 +33,7 @@ import cn.edu.zucc.takeaway.util.BaseException;
 public class FrmModifyGood extends JDialog implements ActionListener {
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
-	private Button btnOk = new Button("添加");
+	private Button btnOk = new Button("修改");
 	private Button btnCancel = new Button("取消");
 	
 	private JLabel labelUser = new JLabel("商品名： ");
@@ -100,7 +100,7 @@ public class FrmModifyGood extends JDialog implements ActionListener {
 					return;
 				
 			}
-			JOptionPane.showMessageDialog(null, "添加成功","成功",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "修改成功","成功",JOptionPane.INFORMATION_MESSAGE);
 			this.setVisible(false);
 		}
 			
