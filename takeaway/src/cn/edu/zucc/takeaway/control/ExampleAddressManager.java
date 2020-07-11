@@ -27,7 +27,7 @@ public class ExampleAddressManager  {
 		List<BeanAddresser> result = new ArrayList<BeanAddresser>();
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from addresses where address like ? and user_no=?";
+			String sql="select * from addresses where address like ? and user_no=? and isdelete = 0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,"%"+name+"%");
 			pst.setInt(2, i);
@@ -79,11 +79,11 @@ public class ExampleAddressManager  {
 			}
 				
 		}
-		
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="insert into addresses(user_no,sheng,shi,address,call_user,address_tele) values(?,?,?,?,?,?)";
+			
+			String sql="insert into addresses(user_no,sheng,shi,address,call_user,address_tele,isdelete) values(?,?,?,?,?,?,0)";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,id );
 			pst.setString(2, sheng);
@@ -115,7 +115,7 @@ public class ExampleAddressManager  {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="delete from addresses where address_no=?";
+			String sql="update addresses set isdelete=1 where address_no=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1, book.getAddress_no());
 			pst.execute();
@@ -151,7 +151,6 @@ public class ExampleAddressManager  {
 			}
 				
 		}
-		
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
