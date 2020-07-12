@@ -478,6 +478,13 @@ public List<BeanOrders> loadallorder (String name) throws DbException{
 				pst.setTimestamp(2, new java.sql.Timestamp(System.currentTimeMillis()));
 				pst.setInt(4, beanOrders.getRider_no());
 				double income=0;
+				if(count>=9)
+				{
+					sql="update rider set rider_level=3 where rider_no=?";
+					java.sql.PreparedStatement pst2=conn.prepareStatement(sql);
+					pst2.setInt(1, beanOrders.getRider_no());
+					pst2.execute();
+				}
 				if(count<100)
 				{
 					income=2;
