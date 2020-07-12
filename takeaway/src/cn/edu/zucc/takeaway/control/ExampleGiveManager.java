@@ -80,16 +80,17 @@ public List<BeanGive> loadgive(int id,String string) throws DbException{
 			rsshop.next();
 			int id2=rsshop.getInt(5);
 			
-			sql="select * from give,youhui where give.user_no=? and youhui.shop_no=? and youhui.isdelete=0";
+			sql="select * from give,youhui where give.user_no=? and youhui.shop_no=? and give.youhui_no=youhui.youhui_no and youhui.isdelete=0";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, id);
 			pst.setInt(2, id2);
 			java.sql.ResultSet rs=pst.executeQuery();
 			
 		
-			sql="select * from youhui where shop_no=? and youhui_no not in (select youhui_no from give where isdelete=0) and isdelete=0";
+			sql="select * from youhui where shop_no=? and youhui_no not in (select youhui_no from give where user_no=?) and isdelete=0";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(1, id2);
+			pst.setInt(2, id);
 			java.sql.ResultSet rs22=pst.executeQuery();
 			
 			while(rs22.next()) {
