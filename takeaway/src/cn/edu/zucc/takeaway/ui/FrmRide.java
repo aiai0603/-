@@ -86,9 +86,11 @@ public class FrmRide extends JDialog implements ActionListener {
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		toolBar.add(btnAdd);
 		toolBar.add(btnModify);
-		
 		toolBar.add(edtKeyword);
 		toolBar.add(btnSearch);
+		this.btnAdd.addActionListener(this);
+		this.btnModify.addActionListener(this);
+		this.btnSearch.addActionListener(this);
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
 		//提取现有数据
 		this.reloadTable();
@@ -101,10 +103,7 @@ public class FrmRide extends JDialog implements ActionListener {
 				(int) (height - this.getHeight()) / 2);
 
 		this.validate();
-		this.btnAdd.addActionListener(this);
-		this.btnModify.addActionListener(this);
-	
-		this.btnSearch.addActionListener(this);
+		
 		
 	}
 
@@ -125,6 +124,10 @@ public class FrmRide extends JDialog implements ActionListener {
 		else if(e.getSource()==this.btnAdd){
 			FrmAddRide dlg=new FrmAddRide(this,"新增骑手",true);
 			dlg.setVisible(true);
+			this.reloadTable();
+			
+		}else if(e.getSource()==this.btnSearch){
+		
 			this.reloadTable();
 			
 		}
