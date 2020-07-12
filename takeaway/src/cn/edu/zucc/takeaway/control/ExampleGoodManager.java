@@ -75,7 +75,7 @@ public class ExampleGoodManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from goods where good_name=? and kind_no = ?";
+			String sql="select * from goods where good_name=? and kind_no = ? and isdelete = 0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,name);
 			pst.setInt(2,kind.getKind_no());
@@ -156,7 +156,7 @@ public class ExampleGoodManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from goods where good_name=? and kind_no = ? and good_no!=?";
+			String sql="select * from goods where good_name=? and kind_no = ? and good_no!=? and isdelete = 0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,name);
 			pst.setInt(2,beanGoods.getKind_no());
@@ -197,15 +197,14 @@ public class ExampleGoodManager {
 		try {
 			conn=DBUtil.getConnection();
 			
-			String sql="select goods.good_no from good_more,goods where goods.good_no=good_more.good_no and goods.isdelete=0 having count(goods.good_no)>=all(select count(goods.good_no) from good_more,goods where good_more.good_no=goods.good_no "
-					+ "and  goods.isdelete=0)";
+			String sql="select goods.good_no,count(*) as count from good_more,goods where goods.good_no=good_more.good_no and"
+					+ " goods.isdelete=0 group by goods.good_no order by count desc";
 		
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			java.sql.ResultSet rs=pst.executeQuery();
 			int goodno=0;
 			
-			rs.next();
-			if(rs.getInt(1)!=0)
+			if(rs.next())
 			{
 				goodno=rs.getInt(1);
 			}
