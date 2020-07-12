@@ -46,8 +46,8 @@ public class BeanShops {
 		
 		if(col==0) return this.getShop_name();
 		else if(col==1) return Integer.toString(this.getLevel());
-		else if(col==2) return Double.toString(this.getAvg_consume());
-		else if(col==3) return Double.toString(this.getSum_sale());
+		else if(col==2) return Integer.toString((int) this.getAvg_consume());
+		else if(col==3) return Integer.toString((int) this.getSum_sale());
 		else return "";
 	}
 
