@@ -54,8 +54,7 @@ public class FrmModifyPwd extends JDialog implements ActionListener {
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
 				(int) (height - this.getHeight()) / 2);
-		this.btnCancel.addActionListener(this);
-		this.btnOk.addActionListener(this);
+	
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
