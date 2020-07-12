@@ -26,7 +26,7 @@ public class ExampleShopManager  {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from shops where shop_name=?";
+			String sql="select * from shops where shop_name=? and isdelete=0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,name);
 			java.sql.ResultSet rs=pst.executeQuery();
@@ -260,14 +260,14 @@ public List<BeanShops> loadshopbysum(String name) throws DbException{
 		}
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from shops where shop_name=?";
+			String sql="select * from shops where shop_name=? and isdelete=0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,name);
 			java.sql.ResultSet rs=pst.executeQuery();
 			if(rs.next())throw new BusinessException("商家已经存在！");
 			
 			
-			sql="select * from shops where shop_no = ?";
+			sql="select * from shops where shop_no = ? and isdelete=0";
 			pst=conn.prepareStatement(sql);
 			pst.setLong(1,id);
 			rs=pst.executeQuery();
