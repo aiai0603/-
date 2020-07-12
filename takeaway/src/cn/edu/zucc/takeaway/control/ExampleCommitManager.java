@@ -61,46 +61,6 @@ public class ExampleCommitManager  {
 		}
 		
 	}
-/*
-	public void modifyrider(int id, String name) throws BusinessException, DbException {
-		// TODO 自动生成的方法存根
-		java.sql.Connection conn=null;
-		if(name==null || "".equals(name) || name.length()>10){
-			throw new BusinessException("骑手名必须是1-10个字");
-		}
-		try {
-			conn=DBUtil.getConnection();
-			String sql="select * from rider where rider_name=?";
-			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			pst.setString(1,name);
-			java.sql.ResultSet rs=pst.executeQuery();
-			if(rs.next())throw new BusinessException("骑手已经存在！");
-			
-			sql="update rider set rider_name=? where rider_no=?";
-			pst=conn.prepareStatement(sql);
-			pst.setString(1,name);
-			pst.setLong(2,id);
-			pst.execute();
-			
-			rs.close();
-			pst.close();
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DbException(e);
-		}
-		finally{
-			if(conn!=null)
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-	}
-	
-	*/
 
 	public boolean tocomment(BeanGoods good, BeanUsers User) throws DbException {
 		java.sql.Connection conn=null;
