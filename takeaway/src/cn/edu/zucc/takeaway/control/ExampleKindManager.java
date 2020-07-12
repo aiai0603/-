@@ -65,7 +65,7 @@ public void addkind(BeanShops bean ,String name) throws DbException, BusinessExc
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from kinds where kind_name=? and shop_no=?";
+			String sql="select * from kinds where kind_name=? and shop_no=? and isdelete =0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,name);
 			pst.setLong(2, bean.getShop_no());
@@ -137,7 +137,7 @@ public void addkind(BeanShops bean ,String name) throws DbException, BusinessExc
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select * from kinds where kind_name=? and shop_no=?";
+			String sql="select * from kinds where kind_name=? and shop_no=? and isdelete =0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,name);
 			pst.setLong(2,kind.getShop_no());
