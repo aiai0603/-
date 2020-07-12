@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50728
 File Encoding         : 65001
 
-Date: 2020-07-08 22:14:41
+Date: 2020-07-12 21:43:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,19 +27,18 @@ CREATE TABLE `addresses` (
   `address` varchar(20) NOT NULL,
   `call_user` varchar(20) NOT NULL,
   `address_tele` varchar(20) NOT NULL,
+  `isdelete` int(20) NOT NULL,
   PRIMARY KEY (`address_no`),
   KEY `FK_have5` (`user_no`),
   CONSTRAINT `FK_have5` FOREIGN KEY (`user_no`) REFERENCES `users` (`user_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of addresses
 -- ----------------------------
-INSERT INTO `addresses` VALUES ('1', '7', 'ZheJiang', 'HangZhou', 'ZUCC', 'xj', '11111111111');
-INSERT INTO `addresses` VALUES ('4', '13', 'ZheJiang', 'WenZhou', '111111', '11111', '11111111122');
-INSERT INTO `addresses` VALUES ('6', '13', 'ZheJiang', 'HangZhou', '1212121', '111', '11111111111');
-INSERT INTO `addresses` VALUES ('7', '13', 'ZheJiang', 'TaiZhou', '1212', '11', '11111111111');
-INSERT INTO `addresses` VALUES ('8', '13', 'ShangHai', 'PuXi', 'lalalaa', '12', '11111111111');
+INSERT INTO `addresses` VALUES ('18', '20', 'ZheJiang', 'HangZhou', 'zucc', 'xj', '11111111111', '0');
+INSERT INTO `addresses` VALUES ('19', '20', 'ZheJiang', 'HangZhou', 'zucc', 'xj2', '11111111111', '1');
+INSERT INTO `addresses` VALUES ('20', '21', 'ZheJiang', 'WenZhou', '11', '11', '11111111111', '0');
 
 -- ----------------------------
 -- Table structure for admins
@@ -50,13 +49,13 @@ CREATE TABLE `admins` (
   `admin_name` varchar(20) NOT NULL,
   `pwd` varchar(20) NOT NULL,
   PRIMARY KEY (`admin_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of admins
 -- ----------------------------
 INSERT INTO `admins` VALUES ('1', '1', '1');
-INSERT INTO `admins` VALUES ('2', 'hk', '1');
+INSERT INTO `admins` VALUES ('4', '2', '1');
 
 -- ----------------------------
 -- Table structure for comment
@@ -68,7 +67,6 @@ CREATE TABLE `comment` (
   `comment_word` varchar(1000) NOT NULL,
   `comment_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `comment_level` bigint(20) NOT NULL,
-  `comment_pic` longblob NOT NULL,
   `shop_no` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`good_no`,`user_no`),
   KEY `FK_comment2` (`user_no`),
@@ -76,11 +74,13 @@ CREATE TABLE `comment` (
   CONSTRAINT `FK_comment` FOREIGN KEY (`good_no`) REFERENCES `goods` (`good_no`),
   CONSTRAINT `FK_comment2` FOREIGN KEY (`user_no`) REFERENCES `users` (`user_no`),
   CONSTRAINT `FK_shop_no` FOREIGN KEY (`shop_no`) REFERENCES `shops` (`shop_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of comment
 -- ----------------------------
+INSERT INTO `comment` VALUES ('46', '20', '1', '2020-07-12 21:42:08', '5', '63');
+INSERT INTO `comment` VALUES ('47', '20', '1', '2020-07-12 21:41:39', '4', '65');
 
 -- ----------------------------
 -- Table structure for counts
@@ -91,18 +91,26 @@ CREATE TABLE `counts` (
   `shop_no` bigint(20) DEFAULT NULL,
   `ac_money` double NOT NULL,
   `count_sale` double NOT NULL,
+  `isdelete` tinyint(1) NOT NULL,
   PRIMARY KEY (`count_no`),
   KEY `FK_have4` (`shop_no`),
   CONSTRAINT `FK_have4` FOREIGN KEY (`shop_no`) REFERENCES `shops` (`shop_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of counts
 -- ----------------------------
-INSERT INTO `counts` VALUES ('13', '9', '10', '1');
-INSERT INTO `counts` VALUES ('14', '9', '200', '3');
-INSERT INTO `counts` VALUES ('16', '9', '31', '2');
-INSERT INTO `counts` VALUES ('17', '9', '40', '2.5');
+INSERT INTO `counts` VALUES ('22', '63', '20', '19', '0');
+INSERT INTO `counts` VALUES ('23', '63', '32', '31', '0');
+INSERT INTO `counts` VALUES ('24', '63', '31.9', '20', '0');
+INSERT INTO `counts` VALUES ('25', '63', '30', '19.5', '0');
+INSERT INTO `counts` VALUES ('26', '63', '19', '18', '0');
+INSERT INTO `counts` VALUES ('27', '63', '13', '12', '0');
+INSERT INTO `counts` VALUES ('28', '62', '20', '11', '1');
+INSERT INTO `counts` VALUES ('29', '62', '19', '1', '0');
+INSERT INTO `counts` VALUES ('30', '62', '32', '30', '0');
+INSERT INTO `counts` VALUES ('31', '65', '12', '1', '0');
+INSERT INTO `counts` VALUES ('32', '62', '20', '12', '0');
 
 -- ----------------------------
 -- Table structure for give
@@ -113,8 +121,8 @@ CREATE TABLE `give` (
   `shop_no` bigint(20) NOT NULL,
   `need` smallint(6) NOT NULL,
   `already` bigint(20) NOT NULL,
-  `youhui_no` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`user_no`,`shop_no`),
+  `youhui_no` bigint(20) NOT NULL,
+  PRIMARY KEY (`user_no`,`youhui_no`),
   KEY `FK_give2` (`shop_no`),
   KEY `FK_give3` (`youhui_no`),
   CONSTRAINT `FK_give` FOREIGN KEY (`user_no`) REFERENCES `users` (`user_no`),
@@ -125,6 +133,10 @@ CREATE TABLE `give` (
 -- ----------------------------
 -- Records of give
 -- ----------------------------
+INSERT INTO `give` VALUES ('20', '62', '2', '1', '24');
+INSERT INTO `give` VALUES ('20', '62', '2', '1', '25');
+INSERT INTO `give` VALUES ('20', '65', '2', '1', '27');
+INSERT INTO `give` VALUES ('21', '65', '2', '1', '27');
 
 -- ----------------------------
 -- Table structure for goods
@@ -136,19 +148,25 @@ CREATE TABLE `goods` (
   `good_name` varchar(20) NOT NULL,
   `good_price` double NOT NULL,
   `good_sale` double NOT NULL,
+  `isdelete` tinyint(1) NOT NULL,
   PRIMARY KEY (`good_no`),
   KEY `FK_have2` (`kind_no`),
   CONSTRAINT `FK_have2` FOREIGN KEY (`kind_no`) REFERENCES `kinds` (`kind_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
-INSERT INTO `goods` VALUES ('24', '15', 'xyrs1', '12', '11');
-INSERT INTO `goods` VALUES ('25', '15', '111111', '111', '11');
-INSERT INTO `goods` VALUES ('26', '15', '121211', '11', '11');
-INSERT INTO `goods` VALUES ('28', '15', 'asasasa', '100', '85');
-INSERT INTO `goods` VALUES ('29', '18', '212121', '3', '2');
+INSERT INTO `goods` VALUES ('38', '25', '小炸鸡', '20', '19', '1');
+INSERT INTO `goods` VALUES ('39', '25', '大炸鸡', '20', '16', '0');
+INSERT INTO `goods` VALUES ('40', '25', '小炸鸡', '12', '11', '0');
+INSERT INTO `goods` VALUES ('41', '32', '111', '11', '11', '1');
+INSERT INTO `goods` VALUES ('42', '34', '可乐', '13', '11', '0');
+INSERT INTO `goods` VALUES ('43', '34', '小清新', '5', '3.5', '0');
+INSERT INTO `goods` VALUES ('44', '33', '肌肉汉堡', '21.7', '11.4', '0');
+INSERT INTO `goods` VALUES ('45', '26', '小炸鸡', '12', '11', '0');
+INSERT INTO `goods` VALUES ('46', '26', 'sm炸鸡', '12', '11', '0');
+INSERT INTO `goods` VALUES ('47', '29', '11', '11', '11', '0');
 
 -- ----------------------------
 -- Table structure for good_more
@@ -170,14 +188,22 @@ CREATE TABLE `good_more` (
 -- ----------------------------
 -- Records of good_more
 -- ----------------------------
-INSERT INTO `good_more` VALUES ('113', '24', '121', '1452', '1331', 'xyrs1');
-INSERT INTO `good_more` VALUES ('114', '26', '1', '11', '11', '121211');
-INSERT INTO `good_more` VALUES ('115', '28', '1', '100', '85', 'asasasa');
-INSERT INTO `good_more` VALUES ('116', '25', '1212', '134532', '13332', '111111');
-INSERT INTO `good_more` VALUES ('117', '26', '12', '132', '132', '121211');
-INSERT INTO `good_more` VALUES ('118', '25', '1212', '134532', '13332', '111111');
-INSERT INTO `good_more` VALUES ('118', '26', '1111', '12221', '12221', '121211');
-INSERT INTO `good_more` VALUES ('118', '28', '1212', '121200', '103020', 'asasasa');
+INSERT INTO `good_more` VALUES ('416', '39', '1', '20', '16', '大炸鸡');
+INSERT INTO `good_more` VALUES ('419', '47', '11', '121', '121', '11');
+INSERT INTO `good_more` VALUES ('421', '39', '1', '20', '16', '大炸鸡');
+INSERT INTO `good_more` VALUES ('423', '47', '1', '11', '11', '11');
+INSERT INTO `good_more` VALUES ('424', '39', '1', '20', '16', '大炸鸡');
+INSERT INTO `good_more` VALUES ('425', '47', '1', '11', '11', '11');
+INSERT INTO `good_more` VALUES ('426', '40', '2', '24', '22', '小炸鸡');
+INSERT INTO `good_more` VALUES ('427', '47', '1', '11', '11', '11');
+INSERT INTO `good_more` VALUES ('428', '39', '11', '220', '176', '大炸鸡');
+INSERT INTO `good_more` VALUES ('429', '46', '1', '12', '11', 'sm炸鸡');
+INSERT INTO `good_more` VALUES ('430', '47', '1', '11', '11', '11');
+INSERT INTO `good_more` VALUES ('432', '46', '11', '132', '132', 'sm炸鸡');
+INSERT INTO `good_more` VALUES ('433', '40', '111', '1332', '1332', '小炸鸡');
+INSERT INTO `good_more` VALUES ('434', '39', '1', '20', '20', '大炸鸡');
+INSERT INTO `good_more` VALUES ('435', '47', '1', '11', '11', '11');
+INSERT INTO `good_more` VALUES ('436', '40', '1', '12', '12', '小炸鸡');
 
 -- ----------------------------
 -- Table structure for kinds
@@ -188,17 +214,26 @@ CREATE TABLE `kinds` (
   `shop_no` bigint(20) DEFAULT NULL,
   `kind_name` varchar(20) NOT NULL,
   `kind_sum` bigint(20) NOT NULL,
+  `isdelete` tinyint(1) NOT NULL,
   PRIMARY KEY (`kind_no`),
   KEY `FK_have` (`shop_no`),
   CONSTRAINT `FK_have` FOREIGN KEY (`shop_no`) REFERENCES `shops` (`shop_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of kinds
 -- ----------------------------
-INSERT INTO `kinds` VALUES ('15', '9', 'cai12121', '4');
-INSERT INTO `kinds` VALUES ('17', '11', 'cai12121', '0');
-INSERT INTO `kinds` VALUES ('18', '9', '111', '1');
+INSERT INTO `kinds` VALUES ('25', '62', '炸鸡', '2', '0');
+INSERT INTO `kinds` VALUES ('26', '63', '炸鸡', '2', '0');
+INSERT INTO `kinds` VALUES ('27', '64', '炸鸡', '0', '1');
+INSERT INTO `kinds` VALUES ('28', '65', '炸鸡', '0', '0');
+INSERT INTO `kinds` VALUES ('29', '65', '汉堡', '1', '0');
+INSERT INTO `kinds` VALUES ('30', '62', '汉堡', '0', '1');
+INSERT INTO `kinds` VALUES ('31', '62', '汉堡', '0', '1');
+INSERT INTO `kinds` VALUES ('32', '62', '汉堡', '0', '1');
+INSERT INTO `kinds` VALUES ('33', '62', '汉堡', '1', '0');
+INSERT INTO `kinds` VALUES ('34', '62', '饮料', '2', '0');
+INSERT INTO `kinds` VALUES ('35', '62', '肌肉汉堡', '0', '1');
 
 -- ----------------------------
 -- Table structure for orders
@@ -230,19 +265,27 @@ CREATE TABLE `orders` (
   CONSTRAINT `FK_have7` FOREIGN KEY (`user_no`) REFERENCES `users` (`user_no`),
   CONSTRAINT `FK_have8` FOREIGN KEY (`rider_no`) REFERENCES `rider` (`rider_no`),
   CONSTRAINT `FK_have9` FOREIGN KEY (`count_no`) REFERENCES `counts` (`count_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=443 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
-INSERT INTO `orders` VALUES ('111', null, null, null, '9', null, null, null, null, null, '0', '13');
-INSERT INTO `orders` VALUES ('112', '4', null, null, '9', null, '0', '0', '2020-07-08 21:54:03', '2020-07-08 22:23:56', '1', '13');
-INSERT INTO `orders` VALUES ('113', '4', null, '14', '9', null, '1331', '1328', '2020-07-08 21:54:53', '2020-07-08 22:24:46', '1', '13');
-INSERT INTO `orders` VALUES ('114', '8', null, '13', '9', '3', '11', '10', '2020-07-08 21:55:53', '2020-07-08 22:25:31', '1', '13');
-INSERT INTO `orders` VALUES ('115', '6', null, null, '9', '3', '85', '84', '2020-07-08 22:00:35', '2020-07-08 22:30:08', '1', '13');
-INSERT INTO `orders` VALUES ('116', null, null, null, '9', null, null, null, null, null, '0', '13');
-INSERT INTO `orders` VALUES ('117', '8', null, '17', '9', '12', '132', '107.5', '2020-07-08 22:04:01', '2020-07-08 22:33:52', '1', '13');
-INSERT INTO `orders` VALUES ('118', '8', null, '14', '9', '12', '128573', '128548', '2020-07-08 22:05:08', '2020-07-08 22:34:55', '1', '13');
+INSERT INTO `orders` VALUES ('416', '18', '13', '32', '62', null, '16', '4', '2020-07-12 21:03:27', '2020-07-12 21:52:46', '5', '20');
+INSERT INTO `orders` VALUES ('419', '18', null, '31', '65', null, '121', '120', '2020-07-12 21:05:15', '2020-07-12 21:35:08', '0', '20');
+INSERT INTO `orders` VALUES ('421', '18', '11', '32', '62', null, '16', '4', '2020-07-12 21:14:00', '2020-07-12 21:52:43', '5', '20');
+INSERT INTO `orders` VALUES ('423', '18', '13', null, '65', null, '11', '11', '2020-07-12 21:14:26', '2020-07-12 21:52:29', '5', '20');
+INSERT INTO `orders` VALUES ('424', '18', '10', '32', '62', null, '16', '4', '2020-07-12 21:17:33', '2020-07-12 21:52:36', '5', '20');
+INSERT INTO `orders` VALUES ('425', '18', '12', null, '65', null, '11', '11', '2020-07-12 21:17:49', '2020-07-12 21:52:23', '5', '20');
+INSERT INTO `orders` VALUES ('426', '18', '11', null, '62', '23', '22', '11', '2020-07-12 21:18:17', '2020-07-12 21:52:16', '5', '20');
+INSERT INTO `orders` VALUES ('427', '18', '10', null, '65', null, '11', '11', '2020-07-12 21:18:52', '2020-07-12 21:52:09', '5', '20');
+INSERT INTO `orders` VALUES ('428', '18', '10', null, '62', '25', '176', '167', '2020-07-12 21:19:17', '2020-07-12 21:52:03', '5', '20');
+INSERT INTO `orders` VALUES ('429', '18', '10', null, '63', null, '11', '11', '2020-07-12 21:19:40', '2020-07-12 21:51:56', '5', '20');
+INSERT INTO `orders` VALUES ('430', '18', '10', null, '65', '27', '11', '8', '2020-07-12 21:20:26', '2020-07-12 21:51:45', '5', '20');
+INSERT INTO `orders` VALUES ('432', '20', '10', '23', '63', null, '132', '101', '2020-07-12 21:27:31', '2020-07-12 22:07:20', '5', '21');
+INSERT INTO `orders` VALUES ('433', '20', '10', null, '62', null, '1332', '1302', '2020-07-12 21:28:05', '2020-07-12 22:07:30', '5', '21');
+INSERT INTO `orders` VALUES ('434', '20', '10', null, '62', '23', '20', '9', '2020-07-12 21:36:36', '2020-07-12 22:07:37', '5', '21');
+INSERT INTO `orders` VALUES ('435', '20', '10', null, '65', null, '11', '11', '2020-07-12 21:36:56', '2020-07-12 22:07:47', '5', '21');
+INSERT INTO `orders` VALUES ('436', '20', '10', null, '62', '23', '12', '1', '2020-07-12 21:39:19', '2020-07-12 22:09:33', '5', '21');
 
 -- ----------------------------
 -- Table structure for owner_count
@@ -266,8 +309,11 @@ CREATE TABLE `owner_count` (
 -- ----------------------------
 -- Records of owner_count
 -- ----------------------------
-INSERT INTO `owner_count` VALUES ('3', '13', '1', '1', '2020-07-31 14:09:58', '9');
-INSERT INTO `owner_count` VALUES ('12', '13', '22', '2', '2020-07-17 22:01:56', '9');
+INSERT INTO `owner_count` VALUES ('23', '20', '11', '2', '2020-09-01 00:00:00', '62');
+INSERT INTO `owner_count` VALUES ('23', '21', '11', '1', '2020-09-01 00:00:00', '62');
+INSERT INTO `owner_count` VALUES ('24', '20', '11', '1', '2021-02-02 00:00:00', '62');
+INSERT INTO `owner_count` VALUES ('24', '21', '11', '1', '2021-02-02 00:00:00', '62');
+INSERT INTO `owner_count` VALUES ('25', '21', '9', '1', '2021-02-01 00:00:00', '62');
 
 -- ----------------------------
 -- Table structure for rider
@@ -280,14 +326,15 @@ CREATE TABLE `rider` (
   `rider_level` bigint(20) NOT NULL,
   `rider_site` tinyint(1) NOT NULL,
   PRIMARY KEY (`rider_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of rider
 -- ----------------------------
-INSERT INTO `rider` VALUES ('1', 'ysg2', '2020-07-07 08:27:03', '1', '0');
-INSERT INTO `rider` VALUES ('3', 'xj12138', '2020-07-07 08:58:54', '1', '0');
-INSERT INTO `rider` VALUES ('4', 'hk1', '2020-07-07 08:58:59', '1', '0');
+INSERT INTO `rider` VALUES ('10', 'ysg', '2020-07-12 20:18:24', '3', '0');
+INSERT INTO `rider` VALUES ('11', 'ysg的小号', '2020-07-12 20:18:43', '1', '0');
+INSERT INTO `rider` VALUES ('12', 'ysg的2号小号', '2020-07-12 20:18:50', '1', '0');
+INSERT INTO `rider` VALUES ('13', '啦啦啦', '2020-07-12 20:25:59', '1', '0');
 
 -- ----------------------------
 -- Table structure for rider_income
@@ -308,6 +355,21 @@ CREATE TABLE `rider_income` (
 -- ----------------------------
 -- Records of rider_income
 -- ----------------------------
+INSERT INTO `rider_income` VALUES ('430', '2020-07-12 21:25:21', '2', '-17.5', '10');
+INSERT INTO `rider_income` VALUES ('429', '2020-07-12 21:25:12', '1', '3', '10');
+INSERT INTO `rider_income` VALUES ('428', '2020-07-12 21:25:09', '1', '3', '10');
+INSERT INTO `rider_income` VALUES ('427', '2020-07-12 21:25:17', '1', '3', '10');
+INSERT INTO `rider_income` VALUES ('426', '2020-07-12 21:22:18', '0', '2.5', '11');
+INSERT INTO `rider_income` VALUES ('425', '2020-07-12 21:22:26', '0', '2.5', '12');
+INSERT INTO `rider_income` VALUES ('423', '2020-07-12 21:25:14', '1', '3', '13');
+INSERT INTO `rider_income` VALUES ('416', '2020-07-12 21:24:56', '1', '3', '13');
+INSERT INTO `rider_income` VALUES ('421', '2020-07-12 21:25:00', '1', '3', '11');
+INSERT INTO `rider_income` VALUES ('424', '2020-07-12 21:25:05', '1', '3', '10');
+INSERT INTO `rider_income` VALUES ('432', '2020-07-12 21:38:33', '1', '3', '10');
+INSERT INTO `rider_income` VALUES ('433', '2020-07-12 21:38:22', '1', '3', '10');
+INSERT INTO `rider_income` VALUES ('434', '2020-07-12 21:38:28', '2', '-17.5', '10');
+INSERT INTO `rider_income` VALUES ('435', '2020-07-12 21:38:35', '1', '3', '10');
+INSERT INTO `rider_income` VALUES ('436', '2020-07-12 21:39:37', '0', '2.5', '10');
 
 -- ----------------------------
 -- Table structure for shops
@@ -319,58 +381,20 @@ CREATE TABLE `shops` (
   `level` bigint(20) NOT NULL,
   `avg_consume` double NOT NULL,
   `sum_sale` double NOT NULL,
+  `isdelete` tinyint(1) NOT NULL,
   PRIMARY KEY (`shop_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of shops
 -- ----------------------------
-INSERT INTO `shops` VALUES ('9', 'xjhouse', '5', '121', '11');
-INSERT INTO `shops` VALUES ('11', 'ysghouse', '5', '22', '22');
-INSERT INTO `shops` VALUES ('12', 'hkhouse', '5', '0', '0');
-INSERT INTO `shops` VALUES ('14', '1', '4', '0', '0');
-INSERT INTO `shops` VALUES ('15', '2', '5', '0', '0');
-INSERT INTO `shops` VALUES ('16', '3', '5', '0', '0');
-INSERT INTO `shops` VALUES ('17', '4', '5', '0', '0');
-INSERT INTO `shops` VALUES ('18', '5', '5', '0', '0');
-INSERT INTO `shops` VALUES ('19', '6', '5', '0', '0');
-INSERT INTO `shops` VALUES ('20', '11', '5', '0', '0');
-INSERT INTO `shops` VALUES ('21', '221', '5', '0', '0');
-INSERT INTO `shops` VALUES ('22', '121212121', '5', '0', '0');
-INSERT INTO `shops` VALUES ('23', '1212121', '5', '0', '0');
-INSERT INTO `shops` VALUES ('24', '2121212', '5', '0', '0');
-INSERT INTO `shops` VALUES ('25', '323232', '5', '0', '0');
-INSERT INTO `shops` VALUES ('26', '323232232', '5', '0', '0');
-INSERT INTO `shops` VALUES ('27', '323', '5', '0', '0');
-INSERT INTO `shops` VALUES ('28', '3333333333', '5', '0', '0');
-INSERT INTO `shops` VALUES ('29', '55555555', '5', '0', '0');
-INSERT INTO `shops` VALUES ('30', '11111111111', '5', '0', '0');
-INSERT INTO `shops` VALUES ('31', '22222222', '5', '0', '0');
-INSERT INTO `shops` VALUES ('32', '3333333333333', '5', '0', '0');
-INSERT INTO `shops` VALUES ('33', '1111111111111111111', '5', '0', '0');
-INSERT INTO `shops` VALUES ('34', '2222222222', '5', '0', '0');
-INSERT INTO `shops` VALUES ('35', '333333333322', '5', '0', '0');
-INSERT INTO `shops` VALUES ('36', '11111111', '5', '0', '0');
-INSERT INTO `shops` VALUES ('37', '1111', '5', '0', '0');
-INSERT INTO `shops` VALUES ('38', '111', '5', '0', '0');
-INSERT INTO `shops` VALUES ('39', '222222222', '5', '0', '0');
-INSERT INTO `shops` VALUES ('40', '111111', '5', '0', '0');
-INSERT INTO `shops` VALUES ('41', '44444444', '5', '0', '0');
-INSERT INTO `shops` VALUES ('42', '6666666', '5', '0', '0');
-INSERT INTO `shops` VALUES ('43', '77777777', '5', '0', '0');
-INSERT INTO `shops` VALUES ('44', '77', '5', '0', '0');
-INSERT INTO `shops` VALUES ('45', '77777777777', '5', '0', '0');
-INSERT INTO `shops` VALUES ('46', '777777777777', '5', '0', '0');
-INSERT INTO `shops` VALUES ('47', '5656', '5', '0', '0');
-INSERT INTO `shops` VALUES ('48', '565', '5', '0', '0');
-INSERT INTO `shops` VALUES ('49', '4545', '5', '0', '0');
-INSERT INTO `shops` VALUES ('50', '21212', '5', '0', '0');
-INSERT INTO `shops` VALUES ('51', '2323232', '5', '0', '0');
-INSERT INTO `shops` VALUES ('52', '4343434', '5', '0', '0');
-INSERT INTO `shops` VALUES ('53', '3434343', '5', '0', '0');
-INSERT INTO `shops` VALUES ('54', '34343434', '5', '0', '0');
-INSERT INTO `shops` VALUES ('55', '343434343', '5', '0', '0');
-INSERT INTO `shops` VALUES ('56', '3232323232323', '5', '0', '0');
+INSERT INTO `shops` VALUES ('61', '11', '5', '0', '0', '1');
+INSERT INTO `shops` VALUES ('62', 'kjj', '5', '201.25', '1610', '0');
+INSERT INTO `shops` VALUES ('63', 'kfc', '5', '71.5', '143', '0');
+INSERT INTO `shops` VALUES ('64', 'kjj', '5', '0', '0', '1');
+INSERT INTO `shops` VALUES ('65', '必胜客', '4', '11', '55', '0');
+INSERT INTO `shops` VALUES ('66', 'k记', '5', '0', '0', '1');
+INSERT INTO `shops` VALUES ('67', 'kjj', '5', '0', '0', '1');
 
 -- ----------------------------
 -- Table structure for users
@@ -388,14 +412,15 @@ CREATE TABLE `users` (
   `vip` tinyint(1) NOT NULL,
   `vip_end` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`user_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('7', 'ysg', '2', '1', '11111111134', '1121212@qq.com', 'HongKong', '2020-07-05 09:03:57', '1', '2023-07-04 21:26:41');
-INSERT INTO `users` VALUES ('13', '1', '0', '1', '11111111111', '1@qq.com', 'HongKong', '2020-07-07 11:00:49', '1', '2022-07-07 09:21:11');
-INSERT INTO `users` VALUES ('14', '11', '2', '11', '11111111111', '1@qq.com', 'HongKong', '2020-07-07 09:22:01', '1', '2020-08-07 09:22:01');
+INSERT INTO `users` VALUES ('20', '1', '0', '1', '11111111111', '1@qq.com', 'HongKong', '2020-07-12 20:59:54', '1', '2021-08-12 20:59:31');
+INSERT INTO `users` VALUES ('21', '2', '0', '1', '11111111111', '1@qq.co', 'JiaXing', '2020-07-12 21:40:06', '1', '2020-08-12 21:40:07');
+INSERT INTO `users` VALUES ('22', '3', '1', '1', '11111111111', '1@qq.com', 'HongKong', '2020-07-12 19:45:17', '0', '0000-00-00 00:00:00');
+INSERT INTO `users` VALUES ('23', '4', '1', '1', '11111111111', '1@qq.com', 'HongKong', '2020-07-12 19:45:32', '0', '0000-00-00 00:00:00');
 
 -- ----------------------------
 -- Table structure for youhui
@@ -409,16 +434,18 @@ CREATE TABLE `youhui` (
   `startday` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `endday` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `together` tinyint(1) NOT NULL,
+  `isdelete` tinyint(1) NOT NULL,
   PRIMARY KEY (`youhui_no`),
   KEY `FK_to` (`shop_no`),
   CONSTRAINT `FK_to` FOREIGN KEY (`shop_no`) REFERENCES `shops` (`shop_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of youhui
 -- ----------------------------
-INSERT INTO `youhui` VALUES ('3', '9', '1', '2', '2000-03-01 00:00:00', '2000-03-01 00:00:00', '0');
-INSERT INTO `youhui` VALUES ('6', '11', '1', '1', '2000-01-01 00:00:00', '2000-03-01 00:00:00', '0');
-INSERT INTO `youhui` VALUES ('9', '11', '30', '3', '2020-03-01 00:00:00', '2020-03-03 00:00:00', '0');
-INSERT INTO `youhui` VALUES ('10', '23', '12', '2', '2020-02-01 00:00:00', '2020-03-01 00:00:00', '0');
-INSERT INTO `youhui` VALUES ('12', '9', '22', '3', '2020-02-01 00:00:00', '2020-03-01 00:00:00', '1');
+INSERT INTO `youhui` VALUES ('23', '62', '11', '1', '2020-04-01 00:00:00', '2020-09-01 00:00:00', '0', '0');
+INSERT INTO `youhui` VALUES ('24', '62', '11', '2', '2020-01-01 00:00:00', '2021-02-02 00:00:00', '1', '0');
+INSERT INTO `youhui` VALUES ('25', '62', '9', '2', '2020-01-01 00:00:00', '2021-02-01 00:00:00', '0', '0');
+INSERT INTO `youhui` VALUES ('26', '63', '1', '1', '2020-01-01 00:00:00', '2031-01-01 00:00:00', '1', '1');
+INSERT INTO `youhui` VALUES ('27', '65', '3', '2', '2020-01-01 00:00:00', '2022-04-02 00:00:00', '1', '0');
+INSERT INTO `youhui` VALUES ('28', '63', '1', '1', '2020-01-01 00:00:00', '2020-03-01 00:00:00', '0', '0');
