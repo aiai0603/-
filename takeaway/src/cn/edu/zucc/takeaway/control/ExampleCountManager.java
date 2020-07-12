@@ -63,6 +63,7 @@ public class ExampleCountManager {
 	public void addcount(BeanShops bs, double p1, double p2) throws BusinessException, DbException {
 		// TODO 自动生成的方法存根
 		java.sql.Connection conn=null;
+		if(p1<=p2)throw new BusinessException("满减数不得多于需求金额");
 		try {
 			conn=DBUtil.getConnection();
 			String sql="select * from counts where ac_money=? and shop_no=? and isdelete=0";
@@ -124,6 +125,7 @@ public class ExampleCountManager {
 
 	public void deletecount(BeanCounts beanCounts) throws DbException {
 		// TODO 自动生成的方法存根
+	
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
@@ -151,6 +153,7 @@ public class ExampleCountManager {
 
 	public void modifycount(BeanCounts count, double p1, double p2) throws BusinessException, DbException {
 		// TODO 自动生成的方法存根
+		if(p1<=p2)throw new BusinessException("满减数不得多于需求金额");
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
@@ -164,11 +167,10 @@ public class ExampleCountManager {
 			
 			sql="select count_sale from counts where shop_no=? and isdelete=0 and ac_money<? and count_no !=? order by ac_money desc limit 1";
 			pst=conn.prepareStatement(sql);
-			pst.setInt(1, count.getCount_no());
+			pst.setInt(1, count.getShop_no());
 			pst.setDouble(2, p1);
 			pst.setInt(3,count.getCount_no());
 			rs=pst.executeQuery();
-			
 			if(rs.next()) 
 			{
 				if(rs.getInt(1)>=p2)throw new BusinessException("该金额满减不得低于上一等级！");
@@ -185,6 +187,7 @@ public class ExampleCountManager {
 			{
 				if(rs.getInt(1)<=p2)throw new BusinessException("该金额满减不得高于下一等级！");
 			}
+			
 			sql="update counts set ac_money=?,count_sale=? where count_no=?";
 			pst=conn.prepareStatement(sql);
 			pst.setInt(3, count.getCount_no());
