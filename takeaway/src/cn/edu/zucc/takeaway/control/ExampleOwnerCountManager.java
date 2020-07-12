@@ -1,6 +1,8 @@
 package cn.edu.zucc.takeaway.control;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -37,7 +39,6 @@ public class ExampleOwnerCountManager {
 			if(rs.next())
 				shop=rs.getInt(1);
 			
-			
 			if(choose==false)
 			{
 				sql="select owner_count.youhui_no,owner_count.user_no,owner_count.count_money,owner_count.num,"
@@ -57,8 +58,9 @@ public class ExampleOwnerCountManager {
 						u.setNum(rs.getInt(4));
 						u.setEnd_date(rs.getTimestamp(5));
 						u.setShop_no(rs.getInt(6));
+						result.add(u);
 					}
-					result.add(u);
+					
 				}
 			
 			
@@ -81,8 +83,9 @@ public class ExampleOwnerCountManager {
 						u.setNum(rs.getInt(4));
 						u.setEnd_date(rs.getTimestamp(5));
 						u.setShop_no(rs.getInt(6));
+						result.add(u);
 					}
-					result.add(u);
+					
 				
 				}
 			}
