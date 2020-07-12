@@ -62,32 +62,7 @@ public class ExampleRideManager  {
 	}
 	
 	
-	public void deleteride(BeanRider beanride) throws DbException, BusinessException {
-		// TODO 自动生成的方法存根
-		java.sql.Connection conn=null;
-		try {
-			conn=DBUtil.getConnection();
-			String sql="delete from rider where rider_no=?";
-			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			pst.setInt(1, beanride.getRider_no());
-			pst.execute();
-			pst.close();
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DbException(e);
-		}
-		finally{
-			if(conn!=null)
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-		
-	}
+
 	
 	public void addride(String name) throws BusinessException, DbException {
 		// TODO 自动生成的方法存根
