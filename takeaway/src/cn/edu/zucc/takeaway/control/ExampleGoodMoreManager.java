@@ -65,6 +65,7 @@ public class ExampleGoodMoreManager {
 
 	public void addordermore(BeanGoods beanGoods, int orderid, int count) throws BusinessException, DbException {
 		// TODO 自动生成的方法存根
+		if(count<=0)throw new BusinessException("数量不得小于1");
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
@@ -338,6 +339,7 @@ public class ExampleGoodMoreManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
 			String sql="delete from good_more where order_no=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,id);
@@ -347,7 +349,7 @@ public class ExampleGoodMoreManager {
 			pst.setInt(1,id);
 			pst.execute();
 			pst.close();
-		
+		conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -355,6 +357,7 @@ public class ExampleGoodMoreManager {
 		finally{
 			if(conn!=null)
 				try {
+					conn.rollback();
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
