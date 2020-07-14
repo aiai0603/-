@@ -72,7 +72,7 @@ public List<BeanGive> loadgive(int id,String string) throws DbException{
 		try {
 			
 			conn=DBUtil.getConnection();
-			
+			conn.setAutoCommit(false);
 			String sql="select * from orders where order_no=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1, id3);
@@ -198,7 +198,7 @@ public List<BeanGive> loadgive(int id,String string) throws DbException{
 			}
 			rs.close();
 			pst.close();
-	
+			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -206,6 +206,7 @@ public List<BeanGive> loadgive(int id,String string) throws DbException{
 		finally{
 			if(conn!=null)
 				try {
+					conn.rollback();
 					conn.close();
 				} catch (SQLException e) {
 				// TODO Auto-generated catch block
