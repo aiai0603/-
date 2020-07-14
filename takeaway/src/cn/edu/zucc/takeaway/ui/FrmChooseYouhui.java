@@ -73,6 +73,7 @@ public class FrmChooseYouhui extends JDialog implements ActionListener {
 
 	public FrmChooseYouhui (FrmSum frmSum, String s, boolean b ,int id, boolean c) {
 		super(frmSum, s, b);
+		FrmSum.by=null;
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		toolBar.add(btnSearch);
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
