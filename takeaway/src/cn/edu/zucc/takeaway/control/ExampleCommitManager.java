@@ -102,6 +102,7 @@ public class ExampleCommitManager  {
 		try {
 			
 			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
 			String sql="select * from comment where good_no=? and user_no=? ";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,goods.getGood_no());
@@ -142,7 +143,7 @@ public class ExampleCommitManager  {
 			
 			rs.close();
 			pst.execute();
-		
+			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -150,6 +151,7 @@ public class ExampleCommitManager  {
 		finally{
 			if(conn!=null)
 				try {
+					conn.rollback();
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -162,8 +164,9 @@ public class ExampleCommitManager  {
 		// TODO 自动生成的方法存根
 		java.sql.Connection conn=null;
 		try {
+		
 			conn=DBUtil.getConnection();
-			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
 			String sql="select * from comment where good_no=? and user_no=? ";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1,goods.getGood_no());
@@ -201,7 +204,7 @@ public class ExampleCommitManager  {
 			
 			rs.close();
 			pst.execute();
-			
+			conn.commit();
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -210,6 +213,7 @@ public class ExampleCommitManager  {
 		finally{
 			if(conn!=null)
 				try {
+					conn.rollback();
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
