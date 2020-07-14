@@ -423,11 +423,20 @@ public class ExampleUserManager  {
 		
 		try {
 			conn=DBUtil.getConnection();
-			String sql="select pwd from users where user_no=?";
+			String sql="select * from users where user_name =? and user_no!=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-			
-			pst.setInt(1,userid);
+			pst.setString(1,username);
+			pst.setInt(2,userid);
 			java.sql.ResultSet rs=pst.executeQuery();
+			if(rs.next()) throw new BusinessException("账号已经存在");
+			
+			
+			
+			
+			sql="select pwd from users where user_no=?";
+			pst=conn.prepareStatement(sql);
+			pst.setInt(1,userid);
+			rs=pst.executeQuery();
 			if(!rs.next()) throw new BusinessException("登陆账号不存在");
 			if(!oldPwd.equals(rs.getString(1))) throw new BusinessException("原始密码错误");
 			rs.close();
