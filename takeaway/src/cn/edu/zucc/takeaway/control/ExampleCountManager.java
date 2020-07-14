@@ -62,6 +62,7 @@ public class ExampleCountManager {
 
 	public void addcount(BeanShops bs, double p1, double p2) throws BusinessException, DbException {
 		// TODO 自动生成的方法存根
+		if(p1<0||p2<0)throw new BusinessException("金额不得为负值");
 		java.sql.Connection conn=null;
 		if(p1<=p2)throw new BusinessException("满减数不得多于需求金额");
 		try {
@@ -153,6 +154,7 @@ public class ExampleCountManager {
 
 	public void modifycount(BeanCounts count, double p1, double p2) throws BusinessException, DbException {
 		// TODO 自动生成的方法存根
+		if(p1<0||p2<0)throw new BusinessException("金额不得为负值");
 		if(p1<=p2)throw new BusinessException("满减数不得多于需求金额");
 		java.sql.Connection conn=null;
 		try {
