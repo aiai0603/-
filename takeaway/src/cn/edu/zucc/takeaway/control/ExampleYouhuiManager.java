@@ -111,6 +111,7 @@ public List<BeanYouHui> loadyouhui2(BeanShops beanshop) throws DbException{
 	public void addyouhui(BeanShops shop, int p1, double p2, String string, String string2, int i) throws BusinessException, ParseException, DbException {
 		// TODO 自动生成的方法存根
 		if(p1>=10||p1<1)throw new BusinessException("需求订单不得高于10单,低于1单");
+		if(p2<0)throw new BusinessException("优惠不得为负值");
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
@@ -183,6 +184,7 @@ public List<BeanYouHui> loadyouhui2(BeanShops beanshop) throws DbException{
 	public void modifyyouhui(BeanYouHui by, int p1, double p2, String string, String string2,int i) throws BusinessException, ParseException, DbException {
 		// TODO 自动生成的方法存根
 		if(p1>=10||p1<1)throw new BusinessException("需求订单不得高于10单,低于1单");
+		if(p2<0)throw new BusinessException("优惠不得为负值");
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
