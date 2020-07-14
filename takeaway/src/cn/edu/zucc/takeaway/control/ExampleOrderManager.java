@@ -29,9 +29,11 @@ public class ExampleOrderManager  {
 	public List<BeanOrders> loadorder (String name, int i) throws DbException{
 		
 		java.sql.Connection conn=null;
+		
 		List<BeanOrders> result = new ArrayList<BeanOrders>();
 		try {
 			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
 			String sql="select orders.order_no,orders.address_no,orders.rider_no,orders.count_no,"
 					+ "orders.shop_no,orders.youhui_no,orders.money,orders.true_money,orders.order_time"
 					+ ",orders.arrive,orders.site,orders.user_no,shops.shop_name  from orders,shops where shops.shop_no=orders.shop_no and shops.shop_name like ? and orders.user_no=?";
@@ -106,6 +108,7 @@ public class ExampleOrderManager  {
 			}
 			rs.close();
 			pst.close();
+			conn.commit();
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -114,6 +117,7 @@ public class ExampleOrderManager  {
 		finally{
 			if(conn!=null)
 				try {
+					conn.rollback();
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -293,6 +297,7 @@ public List<BeanOrders> loadallorder (String name) throws DbException{
 			String sql=null;
 			 java.sql.PreparedStatement pst=null;
 			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
 			if(ad==null)
 			{
 				throw new BusinessException("请选择地址！");
@@ -374,7 +379,7 @@ public List<BeanOrders> loadallorder (String name) throws DbException{
 			
 			 rs.close();
 			 pst.close();
-			
+			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -382,6 +387,7 @@ public List<BeanOrders> loadallorder (String name) throws DbException{
 		finally{
 			if(conn!=null)
 				try {
+					conn.rollback();
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -439,6 +445,7 @@ public List<BeanOrders> loadallorder (String name) throws DbException{
 			if(beanOrders.getSite()!=4&&beanOrders.getSite()!=2)
 				throw new BusinessException("请选择配送中的订单！");
 				conn=DBUtil.getConnection();
+				conn.setAutoCommit(false);
 			
 				String sql="update orders set site=5 where order_no=?";
 				java.sql.PreparedStatement pst=conn.prepareStatement(sql);
@@ -511,6 +518,7 @@ public List<BeanOrders> loadallorder (String name) throws DbException{
 				pst.execute();
 			
 			pst.close();
+			conn.commit();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -519,6 +527,7 @@ public List<BeanOrders> loadallorder (String name) throws DbException{
 		finally{
 			if(conn!=null)
 				try {
+					conn.rollback();
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
