@@ -208,6 +208,9 @@ public class FrmSum extends JDialog implements ActionListener {
 			dlg.setVisible(true);
 			if(by!=null)
 				this.youhui.setLabel("优惠券已减"+by.getCount_money()+"元");
+			else {
+				this.youhui.setLabel("选择我的优惠券");
+			}
 			resum();
 			
 		}else if(e.getSource()==this.address){
