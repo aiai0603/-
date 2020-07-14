@@ -65,7 +65,7 @@ public class ExampleGoodManager {
 
 	public void addgood(BeanKind kind, String name, double p1, double p2) throws BusinessException, DbException {
 		// TODO 自动生成的方法存根
-		
+		if(p1<0||p2<0)throw new BusinessException("金额不得为负值");
 		if(name==null || "".equals(name) || name.length()>20){
 			throw new BusinessException("商品名必须是1-20个字！");
 		}
@@ -75,6 +75,7 @@ public class ExampleGoodManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
 			String sql="select * from goods where good_name=? and kind_no = ? and isdelete = 0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,name);
@@ -95,7 +96,7 @@ public class ExampleGoodManager {
 			pst.execute();
 			
 			pst.close();
-		
+			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -103,6 +104,7 @@ public class ExampleGoodManager {
 		finally{
 			if(conn!=null)
 				try {
+					conn.rollback();
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -117,6 +119,7 @@ public class ExampleGoodManager {
 		java.sql.Connection conn=null;
 		try {
 			conn=DBUtil.getConnection();
+			conn.setAutoCommit(false);
 			String sql="update goods set isdelete=1 where good_no=?";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setInt(1, beanGoods.getGood_no());
@@ -129,6 +132,7 @@ public class ExampleGoodManager {
 			
 			
 			pst.close();
+			conn.commit();
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -137,6 +141,7 @@ public class ExampleGoodManager {
 		finally{
 			if(conn!=null)
 				try {
+					conn.rollback();
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -147,6 +152,7 @@ public class ExampleGoodManager {
 
 	public void modifygood(BeanGoods beanGoods, String name, double p1, double p2) throws BusinessException, DbException {
 		// TODO 自动生成的方法存根
+		if(p1<0||p2<0)throw new BusinessException("金额不得为负值");
 		if(name==null || "".equals(name) || name.length()>20){
 			throw new BusinessException("商品名必须是1-20个字！");
 		}
