@@ -27,6 +27,7 @@ public class ExampleAddressManager  {
 		List<BeanAddresser> result = new ArrayList<BeanAddresser>();
 		try {
 			conn=DBUtil.getConnection();
+		
 			String sql="select * from addresses where address like ? and user_no=? and isdelete = 0";
 			java.sql.PreparedStatement pst=conn.prepareStatement(sql);
 			pst.setString(1,"%"+name+"%");
